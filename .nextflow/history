@@ -1,4 +1,0 @@
-2025-03-24 11:13:10	-	magical_lorenz	-	d58f1721843abe4fa0427b4f3005732c	0e566dcf-ba59-4139-af86-2c0202b1675b	nextflow run main.nf -profile docker,test
-2025-03-24 11:13:51	19.5s	cheesy_poisson	ERR	d58f1721843abe4fa0427b4f3005732c	b3c3b526-edb9-4322-847d-27a7a4cb116f	nextflow run main.nf -profile docker,test --outdir results
-2025-03-24 11:14:31	4m 30s	dreamy_majorana	OK	d58f1721843abe4fa0427b4f3005732c	eb44c23d-d8e4-44a6-b079-7fe48c41f945	nextflow run main.nf -profile docker,test --outdir results
-2025-03-24 14:27:10	-	modest_mercator	-	d58f1721843abe4fa0427b4f3005732c	cf63834c-6fd9-4815-844b-d72f61a32bcd	nextflow run main.nf -profile docker,test --outdir results

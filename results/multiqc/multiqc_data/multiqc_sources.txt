@@ -1,7 +1,0 @@
-Module	Section	Sample Name	Source
-FastQC	all_sections	SAMPLE1_PE_2	/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work/1a/be0f1434db08455b3aa7e10daf86b2/9/SAMPLE1_PE_2_fastqc.zip
-FastQC	all_sections	SAMPLE2_PE_2	/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work/1a/be0f1434db08455b3aa7e10daf86b2/5/SAMPLE2_PE_2_fastqc.zip
-FastQC	all_sections	SAMPLE2_PE_1	/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work/1a/be0f1434db08455b3aa7e10daf86b2/4/SAMPLE2_PE_1_fastqc.zip
-FastQC	all_sections	SAMPLE1_PE_1	/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work/1a/be0f1434db08455b3aa7e10daf86b2/8/SAMPLE1_PE_1_fastqc.zip
-FastQC	all_sections	SAMPLE3_SE_1	/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work/1a/be0f1434db08455b3aa7e10daf86b2/6/SAMPLE3_SE_1_fastqc.zip
-FastQC	all_sections	SAMPLE3_SE_2	/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work/1a/be0f1434db08455b3aa7e10daf86b2/7/SAMPLE3_SE_2_fastqc.zip

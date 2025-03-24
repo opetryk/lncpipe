@@ -1,2 +1,0 @@
-task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
-3	1f/f7139e	32684	NFCORE_LNCPIPE:LNCPIPE:FASTQC (SAMPLE3_SE)	FAILED	126	2025-03-24 11:14:09.077	123ms	39ms	-	-	-	-	-

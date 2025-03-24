@@ -1,0 +1,370 @@
+Mar-24 14:27:06.211 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf -profile docker,test --outdir results
+Mar-24 14:27:06.403 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.4
+Mar-24 14:27:06.432 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/antoine/.nextflow/plugins; core-plugins: nf-amazon@2.9.2,nf-azure@1.10.2,nf-cloudcache@0.4.2,nf-codecommit@0.2.2,nf-console@1.1.4,nf-google@1.15.3,nf-tower@1.9.3,nf-wave@1.7.4
+Mar-24 14:27:06.461 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Mar-24 14:27:06.463 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Mar-24 14:27:06.468 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Mar-24 14:27:06.492 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Mar-24 14:27:06.535 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/nextflow.config
+Mar-24 14:27:06.542 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/nextflow.config
+Mar-24 14:27:06.613 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/antoine/.nextflow/secrets/store.json
+Mar-24 14:27:06.620 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@edf4f36] - activable => nextflow.secret.LocalSecretsProvider@edf4f36
+Mar-24 14:27:06.650 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `docker,test`
+Mar-24 14:27:10.377 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [bih, cfc_dev, uzl_omics, ifb_core, embl_hd, denbi_qbic, alice, mjolnir_globe, uppmax, giga, incliva, ilifu, ki_luria, uge, icr_alma, rosalind_uge, lugh, mccleary, unibe_ibu, vai, czbiohub_aws, jax, roslin, ccga_med, tes, scw, unc_longleaf, tigem, tubingen_apg, google, apollo, ipop_up, vsc_calcua, pdc_kth, googlels, ceci_nic5, humantechnopole, stjude, daisybio, eddie, medair, biowulf, apptainer, bi, bigpurple, adcra, cedars, pawsey_setonix, vsc_kul_uhasselt, pawsey_nimbus, ucl_myriad, utd_ganymede, charliecloud, seattlechildrens, icr_davros, ceres, arm, munin, rosalind, hasta, cfc, uzh, shu_bmrc, ebi_codon_slurm, ebc, ccga_dx, crick, ku_sund_danhead, marvin, shifter, biohpc_gen, mana, mamba, york_viking, unc_lccc, wehi, awsbatch, wustl_htcf, arcc, ceci_dragon2, imperial, maestro, software_license, genotoul, nci_gadi, abims, janelia, nu_genomics, googlebatch, oist, sahmri, kaust, mpcdf, leicester, vsc_ugent, create, sage, cambridge, jex, podman, ebi_codon, cheaha, xanadu, nyu_hpc, test, marjorie, computerome, ucd_sonic, seg_globe, sanger, dkfz, bluebear, pasteur, einstein, ethz_euler, m3c, test_full, imb, ucl_cscluster, tuos_stanage, azurebatch, hki, seadragon, crukmi, csiro_petrichor, qmul_apocrita, wave, docker, engaging, gis, hypatia, psmn, eva, unity, cropdiversityhpc, nygc, fgcz, conda, crg, singularity, mpcdf_viper, pe2, self_hosted_runner, tufts, uw_hyak_pedslabs, debug, genouest, cbe, unsw_katana, gitpod, phoenix, seawulf, uod_hpc, fub_curta, uct_hpc, aws_tower, binac, fsu_draco]
+Mar-24 14:27:10.508 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
+Mar-24 14:27:10.532 [main] DEBUG nextflow.cli.CmdRun - Launching `main.nf` [modest_mercator] DSL2 - revision: d58f172184
+Mar-24 14:27:10.535 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.3.0]
+Mar-24 14:27:10.537 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Mar-24 14:27:10.538 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.3.0]
+Mar-24 14:27:10.538 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.3.0
+Mar-24 14:27:10.548 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.3.0' resolved
+Mar-24 14:27:10.549 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.3.0'
+Mar-24 14:27:10.559 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.3.0
+Mar-24 14:27:10.645 [main] DEBUG nextflow.Session - Session UUID: cf63834c-6fd9-4815-844b-d72f61a32bcd
+Mar-24 14:27:10.646 [main] DEBUG nextflow.Session - Run name: modest_mercator
+Mar-24 14:27:10.647 [main] DEBUG nextflow.Session - Executor pool size: 4
+Mar-24 14:27:10.661 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Mar-24 14:27:10.671 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=12; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Mar-24 14:27:10.701 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 24.10.4 build 5934
+  Created: 20-01-2025 16:47 UTC (17:47 CEST)
+  System: Linux 6.8.0-52-generic
+  Runtime: Groovy 4.0.23 on OpenJDK 64-Bit Server VM 17.0.13-internal+0-adhoc..src
+  Encoding: UTF-8 (UTF-8)
+  Process: 101313@antoine-Lemur [127.0.1.1]
+  CPUs: 4 - Mem: 31.3 GB (11.7 GB) - Swap: 2 GB (2 GB)
+Mar-24 14:27:10.743 [main] DEBUG nextflow.Session - Work-dir: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work [ext2/ext3]
+Mar-24 14:27:10.744 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/bin
+Mar-24 14:27:10.763 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Mar-24 14:27:10.782 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Mar-24 14:27:10.830 [main] DEBUG nextflow.Session - Observer factory: ValidationObserverFactory
+Mar-24 14:27:10.900 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Mar-24 14:27:10.913 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 5; maxThreads: 1000
+Mar-24 14:27:11.005 [main] DEBUG nextflow.Session - Session start
+Mar-24 14:27:11.008 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/results/pipeline_info/execution_trace_2025-03-24_14-27-07.txt
+Mar-24 14:27:11.253 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Mar-24 14:27:12.022 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+Mar-24 14:27:12.672 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+Mar-24 14:27:12.674 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+Mar-24 14:27:12.679 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+Mar-24 14:27:12.680 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+Mar-24 14:27:13.064 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+Mar-24 14:27:13.066 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+Mar-24 14:27:13.070 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+Mar-24 14:27:13.072 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+Mar-24 14:27:13.648 [main] INFO  nextflow.Nextflow - 
+-[2m----------------------------------------------------[0m-
+                                        [0;32m,--.[0;30m/[0;32m,-.[0m
+[0;34m        ___     __   __   __   ___     [0;32m/,-._.--~'[0m
+[0;34m  |\ | |__  __ /  ` /  \ |__) |__         [0;33m}  {[0m
+[0;34m  | \| |       \__, \__/ |  \ |___     [0;32m\`-._,-`-,[0m
+                                        [0;32m`._,._,'[0m
+[0;35m  nf-core/lncpipe 1.0.0dev[0m
+-[2m----------------------------------------------------[0m-
+[1mInput/output options[0m
+  [0;34minput                     : [0;32mhttps://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv[0m
+  [0;34moutdir                    : [0;32mresults[0m
+
+[1mReference genome options[0m
+  [0;34mgenome                    : [0;32mR64-1-1[0m
+  [0;34mfasta                     : [0;32ms3://ngi-igenomes/igenomes//Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/WholeGenomeFasta/genome.fa[0m
+
+[1mInstitutional config options[0m
+  [0;34mconfig_profile_name       : [0;32mTest profile[0m
+  [0;34mconfig_profile_description: [0;32mMinimal test dataset to check pipeline function[0m
+
+[1mGeneric options[0m
+  [0;34mtrace_report_suffix       : [0;32m2025-03-24_14-27-07[0m
+
+[1mCore Nextflow options[0m
+  [0;34mrunName                   : [0;32mmodest_mercator[0m
+  [0;34mcontainerEngine           : [0;32mdocker[0m
+  [0;34mlaunchDir                 : [0;32m/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe[0m
+  [0;34mworkDir                   : [0;32m/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work[0m
+  [0;34mprojectDir                : [0;32m/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe[0m
+  [0;34muserName                  : [0;32mantoine[0m
+  [0;34mprofile                   : [0;32mdocker,test[0m
+  [0;34mconfigFiles               : [0;32m/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/nextflow.config[0m
+
+!! Only displaying parameters that differ from the pipeline defaults !!
+-[2m----------------------------------------------------[0m-
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/lncpipe/blob/master/CITATIONS.md
+
+Mar-24 14:27:13.654 [main] DEBUG n.validation.ValidationExtension - Starting parameters validation
+Mar-24 14:27:14.456 [main] DEBUG nextflow.validation.SchemaEvaluator - Started validating /nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv
+Mar-24 14:27:18.647 [main] DEBUG nextflow.validation.SchemaEvaluator - Validation of file 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv' passed!
+Mar-24 14:27:19.193 [main] DEBUG n.validation.FormatFilePathEvaluator - S3 paths are not supported by 'FormatFilePathEvaluator': 's3://ngi-igenomes/igenomes//Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/WholeGenomeFasta/genome.fa'
+Mar-24 14:27:19.195 [main] DEBUG nextflow.validation.ExistsEvaluator - S3 paths are not supported by 'ExistsEvaluator': 's3://ngi-igenomes/igenomes//Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/WholeGenomeFasta/genome.fa'
+Mar-24 14:27:19.196 [main] DEBUG n.v.FormatDirectoryPathEvaluator - Cloud blob storage paths are not supported by 'FormatDirectoryPathEvaluator': 's3://ngi-igenomes/igenomes/'
+Mar-24 14:27:19.202 [main] DEBUG n.validation.ValidationExtension - Finishing parameters validation
+Mar-24 14:27:22.511 [main] WARN  nextflow.script.ScriptBinding - Access to undefined parameter `adapters` -- Initialise it to a default value eg. `params.adapters = some_value`
+Mar-24 14:27:22.515 [main] WARN  nextflow.script.ScriptBinding - Access to undefined parameter `discard_trimmed_pass` -- Initialise it to a default value eg. `params.discard_trimmed_pass = some_value`
+Mar-24 14:27:22.517 [main] WARN  nextflow.script.ScriptBinding - Access to undefined parameter `save_trimmed_fail` -- Initialise it to a default value eg. `params.save_trimmed_fail = some_value`
+Mar-24 14:27:22.518 [main] WARN  nextflow.script.ScriptBinding - Access to undefined parameter `save_merged` -- Initialise it to a default value eg. `params.save_merged = some_value`
+Mar-24 14:27:22.547 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_4f612cfd8c52e8cd: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/./subworkflows/local/utils_nfcore_lncpipe_pipeline/../../nf-core/utils_nextflow_pipeline/main.nf
+  Script_0fdb2e5f8575be0c: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/./workflows/../modules/nf-core/multiqc/main.nf
+  Script_7804613099ea7c04: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/./workflows/lncpipe.nf
+  Script_dc41886bdbd95b0b: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/./workflows/../modules/nf-core/fastqc/main.nf
+  Script_215a636da7ab24a2: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/./workflows/../subworkflows/local/utils_nfcore_lncpipe_pipeline/../../nf-core/utils_nfschema_plugin/main.nf
+  Script_7b1e97a6dfae7a60: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/./subworkflows/local/utils_nfcore_lncpipe_pipeline/main.nf
+  Script_cbff3c4824841cfc: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/main.nf
+  Script_5c4e8d4051efa81e: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/./subworkflows/local/utils_nfcore_lncpipe_pipeline/../../nf-core/utils_nfcore_pipeline/main.nf
+Mar-24 14:27:22.548 [main] DEBUG nextflow.Session - Session aborted -- Cause: Missing process or function FASTP() -- Did you mean 'FASTQC' instead?
+Mar-24 14:27:22.578 [main] DEBUG nextflow.Session - The following nodes are still active:
+  [operator] map
+  [operator] groupTuple
+  [operator] map
+  [operator] map
+
+Mar-24 14:27:22.581 [main] DEBUG nextflow.Session - 
+Thread[Keep-Alive-Timer,8,InnocuousThreadGroup]
+  java.base@17.0.13-internal/java.lang.Thread.sleep(Native Method)
+  java.base@17.0.13-internal/sun.net.www.http.KeepAliveCache.run(KeepAliveCache.java:238)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+  java.base@17.0.13-internal/jdk.internal.misc.InnocuousThread.run(InnocuousThread.java:162)
+
+Thread[Actor Thread 5,5,main]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack$SNode.block(SynchronousQueue.java:288)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:397)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue.take(SynchronousQueue.java:886)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Thread[Finalizer,8,system]
+  java.base@17.0.13-internal/java.lang.Object.wait(Native Method)
+  java.base@17.0.13-internal/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:155)
+  java.base@17.0.13-internal/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:176)
+  java.base@17.0.13-internal/java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:172)
+
+Thread[Actor Thread 2,5,main]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack$SNode.block(SynchronousQueue.java:288)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:397)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue.take(SynchronousQueue.java:886)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Thread[Notification Thread,9,system]
+
+Thread[Common-Cleaner,8,InnocuousThreadGroup]
+  java.base@17.0.13-internal/java.lang.Object.wait(Native Method)
+  java.base@17.0.13-internal/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:155)
+  java.base@17.0.13-internal/jdk.internal.ref.CleanerImpl.run(CleanerImpl.java:140)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+  java.base@17.0.13-internal/jdk.internal.misc.InnocuousThread.run(InnocuousThread.java:162)
+
+Thread[Thread-1,5,main]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+  java.base@17.0.13-internal/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1679)
+  java.base@17.0.13-internal/java.util.concurrent.LinkedBlockingDeque.pollFirst(LinkedBlockingDeque.java:515)
+  java.base@17.0.13-internal/java.util.concurrent.LinkedBlockingDeque.poll(LinkedBlockingDeque.java:677)
+  app//nextflow.util.SimpleAgent.run(SimpleAgent.groovy:89)
+  java.base@17.0.13-internal/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  java.base@17.0.13-internal/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+  java.base@17.0.13-internal/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+  java.base@17.0.13-internal/java.lang.reflect.Method.invoke(Method.java:569)
+  app//org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+  app//groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+  app//groovy.lang.MetaClassImpl.doInvokeMethod(MetaClassImpl.java:1333)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1088)
+  app//groovy.lang.MetaClassImpl.invokeMethodClosure(MetaClassImpl.java:1017)
+  app//groovy.lang.MetaClassImpl.doInvokeMethod(MetaClassImpl.java:1207)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1088)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+  app//groovy.lang.Closure.call(Closure.java:433)
+  app//groovy.lang.Closure.call(Closure.java:412)
+  app//groovy.lang.Closure.run(Closure.java:505)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Thread[Keep-Alive-SocketCleaner,8,InnocuousThreadGroup]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+  java.base@17.0.13-internal/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1764)
+  java.base@17.0.13-internal/sun.net.www.http.KeepAliveStreamCleaner.run(KeepAliveStreamCleaner.java:121)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+  java.base@17.0.13-internal/jdk.internal.misc.InnocuousThread.run(InnocuousThread.java:162)
+
+Thread[Reference Handler,10,system]
+  java.base@17.0.13-internal/java.lang.ref.Reference.waitForReferencePendingList(Native Method)
+  java.base@17.0.13-internal/java.lang.ref.Reference.processPendingReferences(Reference.java:253)
+  java.base@17.0.13-internal/java.lang.ref.Reference$ReferenceHandler.run(Reference.java:215)
+
+Thread[Actor Thread 3,5,main]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack$SNode.block(SynchronousQueue.java:288)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:397)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue.take(SynchronousQueue.java:886)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Thread[Signal Dispatcher,9,system]
+
+Thread[main,5,main]
+  java.base@17.0.13-internal/java.lang.Thread.dumpThreads(Native Method)
+  java.base@17.0.13-internal/java.lang.Thread.getAllStackTraces(Thread.java:1671)
+  app//nextflow.util.SysHelper.dumpThreads(SysHelper.groovy:188)
+  app//nextflow.Session.abort(Session.groovy:800)
+  app//nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:149)
+  app//nextflow.cli.CmdRun.run(CmdRun.groovy:376)
+  app//nextflow.cli.Launcher.run(Launcher.groovy:503)
+  app//nextflow.cli.Launcher.main(Launcher.groovy:658)
+
+Thread[Actor Thread 1,5,main]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack$SNode.block(SynchronousQueue.java:288)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:397)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue.take(SynchronousQueue.java:886)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Thread[AnsiLogObserver,5,main]
+  java.base@17.0.13-internal/java.lang.Object.wait(Native Method)
+  app//nextflow.trace.AnsiLogObserver.render0(AnsiLogObserver.groovy:185)
+  java.base@17.0.13-internal/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  java.base@17.0.13-internal/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+  java.base@17.0.13-internal/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+  java.base@17.0.13-internal/java.lang.reflect.Method.invoke(Method.java:569)
+  app//org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+  app//groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+  app//groovy.lang.MetaClassImpl.doInvokeMethod(MetaClassImpl.java:1333)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1088)
+  app//groovy.lang.MetaClassImpl.invokeMethodClosure(MetaClassImpl.java:1017)
+  app//groovy.lang.MetaClassImpl.doInvokeMethod(MetaClassImpl.java:1207)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1088)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+  app//groovy.lang.Closure.call(Closure.java:433)
+  app//groovy.lang.Closure.call(Closure.java:412)
+  app//groovy.lang.Closure.run(Closure.java:505)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Thread[process reaper,10,system]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:401)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:903)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1061)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Thread[Actor Thread 4,5,main]
+  java.base@17.0.13-internal/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.13-internal/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack$SNode.block(SynchronousQueue.java:288)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+  java.base@17.0.13-internal/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:397)
+  java.base@17.0.13-internal/java.util.concurrent.SynchronousQueue.take(SynchronousQueue.java:886)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+  java.base@17.0.13-internal/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+  java.base@17.0.13-internal/java.lang.Thread.run(Thread.java:840)
+
+Mar-24 14:27:22.590 [main] ERROR nextflow.cli.Launcher - @unknown
+nextflow.exception.MissingProcessException: Missing process or function FASTP() -- Did you mean 'FASTQC' instead?
+	at nextflow.script.WorkflowDef.run(WorkflowDef.groovy:191)
+	at nextflow.script.BindableDef.invoke_a(BindableDef.groovy:51)
+	at nextflow.script.ComponentDef.invoke_o(ComponentDef.groovy:40)
+	at nextflow.script.WorkflowBinding.invokeMethod(WorkflowBinding.groovy:103)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokePogoMethod(InvokerHelper.java:651)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:628)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeOnDelegationObjects(ClosureMetaClass.java:391)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:330)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at Script_cbff3c4824841cfc$_runScript_closure1$_closure3.doCall(Script_cbff3c4824841cfc:53)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:279)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at groovy.lang.Closure.call(Closure.java:433)
+	at groovy.lang.Closure.call(Closure.java:412)
+	at nextflow.script.WorkflowDef.run0(WorkflowDef.groovy:204)
+	at nextflow.script.WorkflowDef.run(WorkflowDef.groovy:188)
+	at nextflow.script.BindableDef.invoke_a(BindableDef.groovy:51)
+	at nextflow.script.ComponentDef.invoke_o(ComponentDef.groovy:40)
+	at nextflow.script.WorkflowBinding.invokeMethod(WorkflowBinding.groovy:103)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokePogoMethod(InvokerHelper.java:651)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:628)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeOnDelegationObjects(ClosureMetaClass.java:391)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:330)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at Script_cbff3c4824841cfc$_runScript_closure2$_closure4.doCall(Script_cbff3c4824841cfc:83)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:279)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at groovy.lang.Closure.call(Closure.java:433)
+	at groovy.lang.Closure.call(Closure.java:412)
+	at nextflow.script.WorkflowDef.run0(WorkflowDef.groovy:204)
+	at nextflow.script.WorkflowDef.run(WorkflowDef.groovy:188)
+	at nextflow.script.BindableDef.invoke_a(BindableDef.groovy:51)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.script.BaseScript.run0(BaseScript.groovy:198)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.script.BaseScript.run(BaseScript.groovy:209)
+	at nextflow.script.ScriptParser.runScript(ScriptParser.groovy:236)
+	at nextflow.script.ScriptRunner.run(ScriptRunner.groovy:243)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:138)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:376)
+	at nextflow.cli.Launcher.run(Launcher.groovy:503)
+	at nextflow.cli.Launcher.main(Launcher.groovy:658)
+Caused by: groovy.lang.MissingMethodException: No signature of method: nextflow.script.WorkflowBinding.FASTP() is applicable for argument types: () values: []
+Possible solutions: wait(), wait(long), tap(groovy.lang.Closure), wait(long, int), init(), any()
+	at nextflow.script.WorkflowBinding.invokeMethod(WorkflowBinding.groovy:111)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokePogoMethod(InvokerHelper.java:651)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:628)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeOnDelegationObjects(ClosureMetaClass.java:391)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:330)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at Script_7804613099ea7c04$_runScript_closure1$_closure2.doCall(Script_7804613099ea7c04:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:279)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at groovy.lang.Closure.call(Closure.java:433)
+	at groovy.lang.Closure.call(Closure.java:412)
+	at nextflow.script.WorkflowDef.run0(WorkflowDef.groovy:204)
+	at nextflow.script.WorkflowDef.run(WorkflowDef.groovy:188)
+	... 55 common frames omitted

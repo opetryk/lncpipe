@@ -1,0 +1,7 @@
+[2025-03-24 10:18:41,893] multiqc.config                                     [INFO   ]  Loading config settings from: multiqc_config.yml
+[2025-03-24 10:18:42,176] multiqc.core.version_check                         [WARNING]  MultiQC Version v1.28 now available!
+[2025-03-24 10:18:42,177] multiqc.core.file_search                           [INFO   ]  Search path: /home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work/1a/be0f1434db08455b3aa7e10daf86b2
+[2025-03-24 10:18:42,430] multiqc.modules.custom_content.custom_content      [INFO   ]  nf-core-lncpipe-methods-description: Found 1 sample (html)
+[2025-03-24 10:18:42,431] multiqc.modules.custom_content.custom_content      [INFO   ]  nf-core-lncpipe-summary: Found 1 sample (html)
+[2025-03-24 10:18:42,466] multiqc.modules.fastqc.fastqc                      [INFO   ]  Found 6 reports
+[2025-03-24 10:18:42,657] multiqc.core.write_results                         [INFO   ]  Rendering plots. Export plots to formats png, svg, pdf is requested, so it might take a while. To disable plot export, set `export_plots: false` in config, or remove the `--export-plots` command line flag

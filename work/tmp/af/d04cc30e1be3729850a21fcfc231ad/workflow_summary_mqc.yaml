@@ -1,0 +1,36 @@
+id: 'nf-core-lncpipe-summary'
+description: ' - this information is collected when the pipeline is started.'
+section_name: 'nf-core/lncpipe Workflow Summary'
+section_href: 'https://github.com/nf-core/lncpipe'
+plot_type: 'html'
+data: |
+    <p style="font-size:110%"><b>Input/output options</b></p>
+    <dl class="dl-horizontal">
+        <dt>input</dt><dd><samp>https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv</samp></dd>
+        <dt>outdir</dt><dd><samp>results</samp></dd>
+    </dl>
+    <p style="font-size:110%"><b>Reference genome options</b></p>
+    <dl class="dl-horizontal">
+        <dt>fasta</dt><dd><samp>s3://ngi-igenomes/igenomes//Saccharomyces_cerevisiae/Ensembl/R64-1-1/Sequence/WholeGenomeFasta/genome.fa</samp></dd>
+        <dt>genome</dt><dd><samp>R64-1-1</samp></dd>
+    </dl>
+    <p style="font-size:110%"><b>Institutional config options</b></p>
+    <dl class="dl-horizontal">
+        <dt>config_profile_description</dt><dd><samp>Minimal test dataset to check pipeline function</samp></dd>
+        <dt>config_profile_name</dt><dd><samp>Test profile</samp></dd>
+    </dl>
+    <p style="font-size:110%"><b>Generic options</b></p>
+    <dl class="dl-horizontal">
+        <dt>trace_report_suffix</dt><dd><samp>2025-03-24_11-13-48</samp></dd>
+    </dl>
+    <p style="font-size:110%"><b>Core Nextflow options</b></p>
+    <dl class="dl-horizontal">
+        <dt>configFiles</dt><dd><samp>/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/nextflow.config</samp></dd>
+        <dt>containerEngine</dt><dd><samp>docker</samp></dd>
+        <dt>launchDir</dt><dd><samp>/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe</samp></dd>
+        <dt>profile</dt><dd><samp>docker,test</samp></dd>
+        <dt>projectDir</dt><dd><samp>/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe</samp></dd>
+        <dt>runName</dt><dd><samp>cheesy_poisson</samp></dd>
+        <dt>userName</dt><dd><samp>antoine</samp></dd>
+        <dt>workDir</dt><dd><samp>/home/antoine/Documents/ZDS/diverse/AmbassadorNextflow/presentations/2025/hackathon_nextflow_nfcore_march2025/day1/lncpipe/lncpipe/work</samp></dd>
+    </dl>

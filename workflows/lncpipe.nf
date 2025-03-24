@@ -24,6 +24,9 @@ workflow LNCPIPE {
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
+
+
+    
     //
     // MODULE: Run FastQC
     //
@@ -43,6 +46,83 @@ workflow LNCPIPE {
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
+
+
+
+// Checking parameters
+
+/*
+* Step 1: Prepare Annotations
+*/
+
+/*
+* Step 2: Build read aligner (STAR/tophat/HISAT2) index, if not provided
+*/
+// if (!params.merged_gtf) {....
+
+/*
+* Step 3: QC (FastQC/AfterQC/Fastp) of raw reads
+*/
+
+/*
+* Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
+*/
+
+/*
+* Step 5: Transcript assembly using Stringtie
+*/
+
+/*
+* Step 6: Merged GTFs into one
+*/
+
+/*
+* Step 6: Merged GTFs into one
+*/
+
+/*
+* Step 7: Compare assembled gtf with known annotations (GENCODE)
+*/
+
+/*
+* Step 8: Filter GTFs to distinguish novel lncRNAs
+*/
+
+/*
+* Step 9: Predict coding potential abilities using CPAT and PLEK (CNCI functionality coming soon!)
+*/
+
+/*
+* Step 9: Merged and filter lncRNAs based on coding potential (CPAT/PLEK)
+*/
+
+/*
+* Step 10: Further filtered lncRNAs with known criterion
+*/
+
+/*
+* Step 11: Rerun CPAT to evaluate the results
+*/
+
+/*
+* Step 11: Quantification step (Kallisto/Htseq)
+*/
+// if (!params.merged_gtf) {....
+// }else{
+/*
+* Step 11: Quantification step (Kallisto/Htseq)
+*/
+
+/*
+* Step 12: Generate count matrix for differential expression analysis
+*/
+
+/*
+* Step 13: Perform Differential Expression analysis and generate report
+*/
+
+
+// pipeline log 
 
 
     //
@@ -87,6 +167,7 @@ workflow LNCPIPE {
 
     emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+
 
 }
 

@@ -1,0 +1,17 @@
+nextflow.trace/v2
+realtime=20024
+%cpu=1079
+cpu_model=Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz
+rchar=95526297
+wchar=31911494
+syscr=13163
+syscw=1799
+read_bytes=0
+write_bytes=32706560
+%mem=17
+vmem=6593900
+rss=558092
+peak_vmem=10650672
+peak_rss=696516
+vol_ctxt=1000
+inv_ctxt=3601

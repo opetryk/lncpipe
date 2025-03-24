@@ -150,6 +150,28 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+//
+// Function to check samples are internally consistent after being grouped
+//
+def checkSamplesAfterGrouping(input) {
+    def (metas, fastqs) = input[1..2]
+
+    // Check that multiple runs of the same sample are of the same strandedness
+    def strandedness_ok = metas.collect{ it.strandedness }.unique().size == 1
+    if (!strandedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same strandedness!: ${metas[0].id}")
+    }
+
+    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
+    def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
+    if (!endedness_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+    }
+
+    return [ metas[0], fastqs ]
+}
+
 //
 // Check and validate pipeline parameters
 //

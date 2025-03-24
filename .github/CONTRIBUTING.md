@@ -10,7 +10,7 @@ However, don't be put off by this template - other more general issues and sugge
 Contributions to the code are even more welcome ;)
 
 > [!NOTE]
-> If you need help using or modifying nf-core/lncpipe then the best place to ask is on the nf-core Slack [#test](https://nfcore.slack.com/channels/test) channel ([join our Slack here](https://nf-co.re/join/slack)).
+> If you need help using or modifying nf-core/lncpipe then the best place to ask is on the nf-core Slack [#lncpipe](https://nfcore.slack.com/channels/lncpipe) channel ([join our Slack here](https://nf-co.re/join/slack)).
 
 ## Contribution workflow
 
@@ -61,7 +61,7 @@ These tests are run both with the latest available version of `Nextflow` and als
 
 ## Getting help
 
-For further information/help, please consult the [nf-core/lncpipe documentation](https://nf-co.re/test/usage) and don't hesitate to get in touch on the nf-core Slack [#test](https://nfcore.slack.com/channels/test) channel ([join our Slack here](https://nf-co.re/join/slack)).
+For further information/help, please consult the [nf-core/lncpipe documentation](https://nf-co.re/lncpipe/usage) and don't hesitate to get in touch on the nf-core Slack [#lncpipe](https://nfcore.slack.com/channels/lncpipe) channel ([join our Slack here](https://nf-co.re/join/slack)).
 
 ## Pipeline contribution conventions
 

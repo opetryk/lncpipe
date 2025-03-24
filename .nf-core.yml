@@ -7,7 +7,7 @@ lint: {}
 template:
   org: nf-core
   name: lncpipe
-  description:  Analysis of long non-coding RNAs from RNA-seq datasets
+  description: Analysis of long non-coding RNAs from RNA-seq datasets
   author:
   version: 1.0.0dev
   force: true

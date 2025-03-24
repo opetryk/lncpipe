@@ -3,16 +3,15 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                                } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap                      } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc                  } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText                } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
-include { checkSamplesAfterGrouping             } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
-include { samplesheetToList                     } from 'plugin/nf-schema'
+include { FASTQC                 } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap       } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
+include { checkSamplesAfterGrouping  } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
+include { samplesheetToList                } from 'plugin/nf-schema'
 include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness'
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW

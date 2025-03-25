@@ -281,6 +281,25 @@
         },
         "skip_bbsplit": {
             "type": "boolean"
+        },
+        "gencode": {
+            "type": "boolean"
+        },
+        "featurecounts_feature_type": {
+            "type": "string",
+            "default": "exon"
+        },
+        "featurecounts_group_type": {
+            "type": "string",
+            "default": "gene_biotype"
+        },
+        "gtf_extra_attributes": {
+            "type": "string",
+            "default": "gene_name"
+        },
+        "gtf_group_features": {
+            "type": "string",
+            "default": "gene_id"
         }
     }
 }

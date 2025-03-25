@@ -280,7 +280,8 @@
             "type": "string"
         },
         "skip_bbsplit": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
         },
         "gencode": {
             "type": "boolean"
@@ -300,6 +301,44 @@
         "gtf_group_features": {
             "type": "string",
             "default": "gene_id"
+        },
+        "splice_sites": {
+            "type": "string"
+        },
+        "skip_gtf_filter": {
+            "type": "boolean"
+        },
+        "bam_csi_index": {
+            "type": "boolean"
+        },
+        "bbsplit_fasta_list": {
+            "type": "string"
+        },
+        "save_bbsplit_reads": {
+            "type": "boolean"
+        },
+        "remove_ribo_rna": {
+            "type": "boolean"
+        },
+        "save_non_ribo_reads": {
+            "type": "boolean"
+        },
+        "ribo_database_manifest": {
+            "type": "string",
+            "default": "/home/ctuni/hackathon/lncpipe/workflows/rnaseq/assets/rrna-db-defaults.txt"
+        },
+        "aligner": {
+            "type": "string",
+            "default": "star"
+        },
+        "pseudo_aligner": {
+            "type": "string"
+        },
+        "skip_alignment": {
+            "type": "boolean"
+        },
+        "skip_pseudo_alignment": {
+            "type": "boolean"
         }
     }
 }

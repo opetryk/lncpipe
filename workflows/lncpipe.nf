@@ -98,7 +98,7 @@ workflow LNCPIPE {
     salmon_index_available = params.salmon_index || (!params.skip_pseudo_alignment && params.pseudo_aligner == 'salmon')
 
     FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS (
-        ch_fastq,
+        ch_samplesheet,
         ch_fasta,
         ch_transcript_fasta,
         ch_gtf,
@@ -138,11 +138,11 @@ workflow LNCPIPE {
     //
     // MODULE: Run FastQC
     //
-    FASTQC (
-        ch_samplesheet
-    )
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    // FASTQC (
+    //     ch_samplesheet
+    // )
+    // ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
+    // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     // Collate and save software versions

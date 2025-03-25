@@ -21,6 +21,7 @@ workflow LNCPIPE {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    ch_versions          // channel: [ path(versions.yml) ]
     ch_fasta             // channel: path(genome.fasta)
     ch_gtf               // channel: path(genome.gtf)
     ch_fai               // channel: path(genome.fai)
@@ -39,7 +40,6 @@ workflow LNCPIPE {
     make_sortmerna_index // boolean: Whether to create an index before running sortmerna
     main:
 
-    ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
     //

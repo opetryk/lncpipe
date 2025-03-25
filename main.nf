@@ -16,9 +16,11 @@
 */
 
 include { LNCPIPE  } from './workflows/lncpipe'
+include { PREPARE_GENOME } from './subworkflows/local/prepare_genome'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_lncpipe_pipeline'
+include { checkMaxContigSize      } from './subworkflows/local/utils_nfcore_lncpipe_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,10 +28,20 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_lncp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// TODO nf-core: Remove this line if you don't need a FASTA file
-//   This is an example of how to use getGenomeAttribute() to fetch parameters
-//   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
+// TODO Decide which inputs are needed, or not
+params.fasta            = getGenomeAttribute('fasta')
+params.additional_fasta = getGenomeAttribute('additional_fasta')
+params.transcript_fasta = getGenomeAttribute('transcript_fasta')
+params.gff              = getGenomeAttribute('gff')
+params.gtf              = getGenomeAttribute('gtf')
+params.gene_bed         = getGenomeAttribute('bed12')
+params.bbsplit_index    = getGenomeAttribute('bbsplit')
+params.sortmerna_index  = getGenomeAttribute('sortmerna')
+params.star_index       = getGenomeAttribute('star')
+params.rsem_index       = getGenomeAttribute('rsem')
+params.hisat2_index     = getGenomeAttribute('hisat2')
+params.salmon_index     = getGenomeAttribute('salmon')
+params.kallisto_index   = getGenomeAttribute('kallisto')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,18 +55,80 @@ params.fasta = getGenomeAttribute('fasta')
 workflow NFCORE_LNCPIPE {
 
     take:
-    samplesheet // channel: samplesheet read in from --input
+    samplesheet
 
     main:
+
+    ch_versions = Channel.empty()
+
+    //
+    // SUBWORKFLOW: Prepare reference genome files
+    //
+    PREPARE_GENOME (
+        params.fasta,
+        params.gtf,
+        params.gff,
+        params.additional_fasta,
+        params.transcript_fasta,
+        params.gene_bed,
+        params.splicesites,
+        params.bbsplit_fasta_list,
+        params.ribo_database_manifest,
+        params.star_index,
+        params.rsem_index,
+        params.salmon_index,
+        params.kallisto_index,
+        params.hisat2_index,
+        params.bbsplit_index,
+        params.sortmerna_index,
+        params.gencode,
+        params.featurecounts_group_type,
+        params.aligner,
+        params.pseudo_aligner,
+        params.skip_gtf_filter,
+        params.skip_bbsplit,
+        !params.remove_ribo_rna,
+        params.skip_alignment,
+        params.skip_pseudo_alignment
+    )
+    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
+
+    // Check if contigs in genome fasta file > 512 Mbp
+    if (!params.skip_alignment && !params.bam_csi_index) {
+        PREPARE_GENOME
+            .out
+            .fai
+            .map { checkMaxContigSize(it) }
+    }
 
     //
     // WORKFLOW: Run pipeline
     //
     LNCPIPE (
-        samplesheet
+        samplesheet,
+        ch_versions,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.gtf,
+        PREPARE_GENOME.out.fai,
+        PREPARE_GENOME.out.chrom_sizes,
+        PREPARE_GENOME.out.gene_bed,
+        PREPARE_GENOME.out.transcript_fasta,
+        PREPARE_GENOME.out.star_index,
+        PREPARE_GENOME.out.rsem_index,
+        PREPARE_GENOME.out.hisat2_index,
+        PREPARE_GENOME.out.salmon_index,
+        PREPARE_GENOME.out.kallisto_index,
+        PREPARE_GENOME.out.bbsplit_index,
+        PREPARE_GENOME.out.rrna_fastas,
+        PREPARE_GENOME.out.sortmerna_index,
+        PREPARE_GENOME.out.splicesites,
+        !params.remove_ribo_rna && params.remove_ribo_rna
     )
+    ch_versions = ch_versions.mix(LNCPIPE.out.versions)
+
     emit:
     multiqc_report = LNCPIPE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    versions       = ch_versions               // channel: [version1, version2, ...]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

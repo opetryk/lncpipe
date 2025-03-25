@@ -241,5 +241,43 @@
         {
             "$ref": "#/$defs/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "additional_fasta": {
+            "type": "string"
+        },
+        "transcript_fasta": {
+            "type": "string"
+        },
+        "gff": {
+            "type": "string"
+        },
+        "gtf": {
+            "type": "string"
+        },
+        "gene_bed": {
+            "type": "string"
+        },
+        "bbsplit_index": {
+            "type": "string"
+        },
+        "sortmerna_index": {
+            "type": "string"
+        },
+        "star_index": {
+            "type": "string"
+        },
+        "rsem_index": {
+            "type": "string"
+        },
+        "hisat2_index": {
+            "type": "string"
+        },
+        "salmon_index": {
+            "type": "string"
+        },
+        "kallisto_index": {
+            "type": "string"
+        }
+    }
 }

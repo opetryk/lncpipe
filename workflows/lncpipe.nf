@@ -11,7 +11,7 @@ include { softwareVersionsToYAML                } from '../subworkflows/nf-core/
 include { methodsDescriptionText                } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { checkSamplesAfterGrouping             } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { samplesheetToList                     } from 'plugin/nf-schema'
-include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness' 
+include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

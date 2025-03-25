@@ -377,6 +377,44 @@
         },
         "skip_fastqc": {
             "type": "boolean"
+        },
+        "stranded_threshold": {
+            "type": "number",
+            "default": 0.8
+        },
+        "unstranded_threshold": {
+            "type": "number",
+            "default": 0.1
+        },
+        "umitools_extract_method": {
+            "type": "string",
+            "default": "string"
+        },
+        "umi_dedup_tool": {
+            "type": "string",
+            "default": "umitools"
+        },
+        "umitools_grouping_method": {
+            "type": "string",
+            "default": "directional"
+        },
+        "umitools_dedup_stats": {
+            "type": "boolean"
+        },
+        "umitools_bc_pattern": {
+            "type": "string"
+        },
+        "umitools_bc_pattern2": {
+            "type": "string"
+        },
+        "umitools_umi_separator": {
+            "type": "string"
+        },
+        "umi_discard_read": {
+            "type": "string"
+        },
+        "save_umi_intermeds": {
+            "type": "boolean"
         }
     }
 }

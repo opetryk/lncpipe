@@ -241,5 +241,109 @@
         {
             "$ref": "#/$defs/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "additional_fasta": {
+            "type": "string"
+        },
+        "transcript_fasta": {
+            "type": "string"
+        },
+        "gff": {
+            "type": "string"
+        },
+        "gtf": {
+            "type": "string"
+        },
+        "gene_bed": {
+            "type": "string"
+        },
+        "bbsplit_index": {
+            "type": "string"
+        },
+        "sortmerna_index": {
+            "type": "string"
+        },
+        "star_index": {
+            "type": "string"
+        },
+        "rsem_index": {
+            "type": "string"
+        },
+        "hisat2_index": {
+            "type": "string"
+        },
+        "salmon_index": {
+            "type": "string"
+        },
+        "kallisto_index": {
+            "type": "string"
+        },
+        "skip_bbsplit": {
+            "type": "boolean",
+            "default": true
+        },
+        "gencode": {
+            "type": "boolean"
+        },
+        "featurecounts_feature_type": {
+            "type": "string",
+            "default": "exon"
+        },
+        "featurecounts_group_type": {
+            "type": "string",
+            "default": "gene_biotype"
+        },
+        "gtf_extra_attributes": {
+            "type": "string",
+            "default": "gene_name"
+        },
+        "gtf_group_features": {
+            "type": "string",
+            "default": "gene_id"
+        },
+        "splicesites": {
+            "type": "string"
+        },
+        "skip_gtf_filter": {
+            "type": "boolean"
+        },
+        "bam_csi_index": {
+            "type": "boolean"
+        },
+        "bbsplit_fasta_list": {
+            "type": "string"
+        },
+        "save_bbsplit_reads": {
+            "type": "boolean"
+        },
+        "remove_ribo_rna": {
+            "type": "boolean"
+        },
+        "save_non_ribo_reads": {
+            "type": "boolean"
+        },
+        "ribo_database_manifest": {
+            "type": "string",
+            "format": "file-path",
+            "exists": true,
+            "mimetype": "text/plain",
+            "fa_icon": "fas fa-database",
+            "description": "Text file containing paths to fasta files (one per line) that will be used to create the database for SortMeRNA.",
+            "help_text": "By default, [rRNA databases](https://github.com/biocore/sortmerna/tree/master/data/rRNA_databases) defined in the SortMeRNA GitHub repo are used. You can see an example in the pipeline Github repository in `assets/rrna-default-dbs.txt`.\nPlease note that commercial/non-academic entities require [`licensing for SILVA`](https://www.arb-silva.de/silva-license-information) for these default databases."
+        },
+        "aligner": {
+            "type": "string",
+            "default": "star"
+        },
+        "pseudo_aligner": {
+            "type": "string"
+        },
+        "skip_alignment": {
+            "type": "boolean"
+        },
+        "skip_pseudo_alignment": {
+            "type": "boolean"
+        }
+    }
 }

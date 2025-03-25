@@ -63,6 +63,33 @@ workflow LNCPIPE {
         }
         .set { ch_fastq }
 
+// Checking parameters
+// ...
+
+
+
+
+
+/*
+* Step 3: QC (FastQC/AfterQC/Fastp) of raw reads
+*/
+
+    //
+    // MODULE: FASTP
+    //
+    // ch_adapters = params.adapters ? params.adapters : []
+
+    // FASTP (
+    //     ch_samplesheet,
+    //     ch_adapters,
+    //     params.discard_trimmed_pass,
+    //     params.save_trimmed_fail,
+    //     params.save_merged
+    // )
+    // ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]}.ifEmpty([]))
+    // ch_versions      = ch_versions.mix(FASTP.out.versions.first())
+
+
     //
     // Run RNA-seq FASTQ preprocessing subworkflow
     //
@@ -130,6 +157,125 @@ workflow LNCPIPE {
         ).set { ch_collated_versions }
 
 
+    // AFTERQC(read_pairs_ch)
+    // qc_ch = AFTERQC.out.html
+    // read_pairs_ch = AFTERQC.out.reads
+
+
+
+/*
+* Step 1: Prepare Annotations
+*/
+/*
+* Step 2: Build read aligner (STAR/tophat/HISAT2) index, if not provided
+*/
+/*
+* Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
+*/
+    // if (params.aligner == 'star') {
+    //     STAR_ALIGN(read_pairs_ch, params.fasta, params.star_index)
+    //     aligned_reads_ch = STAR_ALIGN.out.bam
+    // } else if (params.aligner == 'hisat2') {
+    //     HISAT2_ALIGN(read_pairs_ch, params.fasta, params.hisat2_index)
+    //     aligned_reads_ch = HISAT2_ALIGN.out.bam
+    // }
+
+
+/*
+* Step 5: Transcript assembly using Stringtie
+*/
+/*
+* Step 6: Merged GTFs into one
+*/
+    // if (params.aligner == 'hisat2') {
+    // STRINGTIE_ASSEMBLY(aligned_reads_ch, params.gtf)
+    // STRINGTIE_MERGE(STRINGTIE_ASSEMBLY.out.gtf.collect(), params.fasta)
+    // merged_gtf_ch = STRINGTIE_MERGE.out.merged_gtf
+    // } else {
+    // CUFFLINKS_ASSEMBLY(aligned_reads_ch, params.fasta, params.gtf)
+    // CUFFMERGE(CUFFLINKS_ASSEMBLY.out.gtf.collect(), params.fasta)
+    // merged_gtf_ch = CUFFMERGE.out.merged_gtf
+    // }
+
+/*
+* Step 7: Compare assembled gtf with known annotations (GENCODE)
+*/
+    //GFFCOMPARE(merged_gtf_ch, params.gtf)
+
+
+/*
+* Step 8: Filter GTFs to distinguish novel lncRNAs
+*/
+    //IDENTIFY_NOVEL_LNCRNA(GFFCOMPARE.out.tmap, params.fasta, merged_gtf_ch)
+
+/*
+* Step 9: Predict coding potential abilities using CPAT and PLEK (CNCI functionality coming soon!)
+*/
+    // PREDICT_CODING_POTENTIAL_PLEK(IDENTIFY_NOVEL_LNCRNA.out.fasta)
+    // PREDICT_CODING_POTENTIAL_CPAT(IDENTIFY_NOVEL_LNCRNA.out.fasta)
+
+/*
+* Step 9: Merged and filter lncRNAs based on coding potential (CPAT/PLEK)
+*/
+    // FILTER_LNCRNA(
+    //     PREDICT_CODING_POTENTIAL_PLEK.out.results,
+    //     PREDICT_CODING_POTENTIAL_CPAT.out.results,
+    //     IDENTIFY_NOVEL_LNCRNA.out.exon_count,
+    //     merged_gtf_ch,
+    //     params.gtf
+    // )
+
+/*
+* Step 10: Further filtered lncRNAs with known criterion
+*/
+    // SUMMARY_AND_CLASSIFICATION(
+    //     FILTER_LNCRNA.out.novel_lncrna_gtf,
+    //     params.gtf,
+    //     params.fasta
+    // )
+
+/*
+* Step 11: Rerun CPAT to evaluate the results
+*/
+    // RERUN_CPAT_LNCRNA(SUMMARY_AND_CLASSIFICATION.out.lncrna_fasta)
+    // RERUN_CPAT_CODING(SUMMARY_AND_CLASSIFICATION.out.coding_fasta)
+    // SECONDARY_STATISTICS(
+    //     SUMMARY_AND_CLASSIFICATION.out.gtf,
+    //     SUMMARY_AND_CLASSIFICATION.out.lncrna_gtf,
+    //     RERUN_CPAT_LNCRNA.out.results,
+    //     RERUN_CPAT_CODING.out.results,
+    //     SUMMARY_AND_CLASSIFICATION.out.classification
+    // )
+
+/*
+* Step 11: Quantification step (Kallisto/Htseq)
+*/
+/*
+* Step 12: Generate count matrix for differential expression analysis
+*/
+    // if (params.quant == "htseq") {
+    //     HTSEQ_COUNT(aligned_reads_ch, SUMMARY_AND_CLASSIFICATION.out.final_gtf)
+    //     GET_HTSEQ_MATRIX(HTSEQ_COUNT.out.counts.collect(), SUMMARY_AND_CLASSIFICATION.out.final_gtf)
+    //     expression_matrix_ch = GET_HTSEQ_MATRIX.out.matrix
+    // } else {
+    //     KALLISTO_INDEX(SUMMARY_AND_CLASSIFICATION.out.final_fasta)
+    //     KALLISTO_QUANT(read_pairs_ch, KALLISTO_INDEX.out.index)
+    //     GET_KALLISTO_MATRIX(KALLISTO_QUANT.out.abundance.collect(), SUMMARY_AND_CLASSIFICATION.out.final_gtf)
+    //     expression_matrix_ch = GET_KALLISTO_MATRIX.out.matrix
+    // }
+
+
+/*
+* Step 13: Perform Differential Expression analysis and generate report
+*/
+    // LNCPIPEREPORTER(
+    //     params.design,
+    //     STAR_ALIGN.out.log.collect(),
+    //     SECONDARY_STATISTICS.out.stats,
+    //     expression_matrix_ch
+    // )
+
+
     //
     // MODULE: MultiQC
     //
@@ -172,6 +318,8 @@ workflow LNCPIPE {
 
     emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+
+
 
 }
 

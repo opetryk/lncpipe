@@ -302,7 +302,7 @@
             "type": "string",
             "default": "gene_id"
         },
-        "splice_sites": {
+        "splicesites": {
             "type": "string"
         },
         "skip_gtf_filter": {

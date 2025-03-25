@@ -344,6 +344,39 @@
         },
         "skip_pseudo_alignment": {
             "type": "boolean"
+        },
+        "with_umi": {
+            "type": "boolean"
+        },
+        "skip_umi_extract": {
+            "type": "boolean"
+        },
+        "skip_linting": {
+            "type": "boolean"
+        },
+        "extra_fqlint_args": {
+            "type": "string",
+            "default": "--disable-validator P001"
+        },
+        "trimmer": {
+            "type": "string",
+            "default": "trimgalore"
+        },
+        "min_trimmed_reads": {
+            "type": "integer",
+            "default": 10000
+        },
+        "save_trimmed": {
+            "type": "boolean"
+        },
+        "skip_trimming": {
+            "type": "boolean"
+        },
+        "skip_qc": {
+            "type": "boolean"
+        },
+        "skip_fastqc": {
+            "type": "boolean"
         }
     }
 }

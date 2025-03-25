@@ -278,6 +278,9 @@
         },
         "kallisto_index": {
             "type": "string"
+        },
+        "skip_bbsplit": {
+            "type": "boolean"
         }
     }
 }

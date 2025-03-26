@@ -3,20 +3,18 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { STAR_ALIGN             } from '../modules/nf-core/star/align/main' // Taking a leap of faith here, nf-core/rnaseq uses a local star module but i hope it's the same.
-include { FASTQ_ALIGN_STAR       } from '../subworkflows/nf-core/fastq_align_star/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
-include { checkSamplesAfterGrouping  } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
-include { samplesheetToList                } from 'plugin/nf-schema'
+include { FASTQC                                } from '../modules/nf-core/fastqc/main'
+include { FASTQ_ALIGN_STAR                      } from '../subworkflows/nf-core/fastq_align_star/main'
+include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap                      } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc                  } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText                } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
+include { samplesheetToList                     } from 'plugin/nf-schema'
 include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness'
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_STAR   } from '../subworkflows/nf-core/bam_dedup_umi' // I would like to not import these as 2 and just have 1 workflow able to work with both star and hisat2 data.
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_HISAT2 } from '../subworkflows/nf-core/bam_dedup_umi'
-include { FASTQ_ALIGN_HISAT2               } from '../subworkflows/nf-core/fastq_align_hisat2'
+include { FASTQ_ALIGN_HISAT2                    } from '../subworkflows/nf-core/fastq_align_hisat2'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,18 +46,6 @@ workflow LNCPIPE {
     main:
 
     ch_multiqc_files = Channel.empty()
-
-// Checking parameters
-// ...
-
-
-
-
-/*
-* Step 3: QC (FastQC/AfterQC/Fastp) of raw reads
-*/
-
-
 
     //
     // Run RNA-seq FASTQ preprocessing subworkflow
@@ -118,19 +104,6 @@ workflow LNCPIPE {
             newLine: true
         ).set { ch_collated_versions }
 
-
-    // AFTERQC(read_pairs_ch)
-    // qc_ch = AFTERQC.out.html
-    // read_pairs_ch = AFTERQC.out.reads
-
-
-
-/*
-* Step 1: Prepare Annotations
-*/
-/*
-* Step 2: Build read aligner (STAR/tophat/HISAT2) index, if not provided
-*/
     /*
     * Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
     */

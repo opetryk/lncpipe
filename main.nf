@@ -104,6 +104,7 @@ workflow NFCORE_LNCPIPE {
     //
     // WORKFLOW: Run pipeline
     //
+    ch_samplesheet = Channel.value(file(params.input, checkIfExists: true))
     LNCPIPE (
         samplesheet,
         ch_versions,

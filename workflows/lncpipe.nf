@@ -5,6 +5,7 @@
 */
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { STAR_ALIGN             } from '../modules/nf-core/star/align/main' // Taking a leap of faith here, nf-core/rnaseq uses a local star module but i hope it's the same.
+include { FASTQ_ALIGN_STAR       } from '../subworkflows/nf-core/fastq_align_star/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -37,6 +38,7 @@ workflow LNCPIPE {
     ch_star_index        // channel: path(star/index/)
     ch_rsem_index        // channel: path(rsem/index/)
     ch_hisat2_index      // channel: path(hisat2/index/)
+    ch_salmon_index      // channel: path(salmon/index/)
     ch_kallisto_index    // channel: [ meta, path(kallisto/index/) ] // this should not be ready yet..
     ch_bbsplit_index     // channel: path(bbsplit/index/)
     ch_ribo_db           // channel: path(sortmerna_fasta_list)
@@ -53,25 +55,10 @@ workflow LNCPIPE {
 
 
 
-
 /*
 * Step 3: QC (FastQC/AfterQC/Fastp) of raw reads
 */
 
-    //
-    // MODULE: FASTP
-    //
-    // ch_adapters = params.adapters ? params.adapters : []
-
-    // FASTP (
-    //     ch_samplesheet,
-    //     ch_adapters,
-    //     params.discard_trimmed_pass,
-    //     params.save_trimmed_fail,
-    //     params.save_merged
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]}.ifEmpty([]))
-    // ch_versions      = ch_versions.mix(FASTP.out.versions.first())
 
 
     //
@@ -121,15 +108,6 @@ workflow LNCPIPE {
         }
 
     //
-    // MODULE: Run FastQC
-    //
-    // FASTQC (
-    //     ch_samplesheet
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-
-    //
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
@@ -160,6 +138,7 @@ workflow LNCPIPE {
     //
     // SUBWORKFLOW: Alignment with STAR and gene/transcript quantification with Salmon
     //
+
     ch_genome_bam          = Channel.empty()
     ch_genome_bam_index    = Channel.empty()
     ch_star_log            = Channel.empty()
@@ -175,27 +154,33 @@ workflow LNCPIPE {
             }
         }
 
-        ALIGN_STAR (
-            ch_strand_inferred_filtered_fastq,
+        FASTQ_ALIGN_STAR(
+            FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS.out.reads,
             ch_star_index.map { [ [:], it ] },
             ch_gtf.map { [ [:], it ] },
             params.star_ignore_sjdbgtf,
             '',
             params.seq_center ?: '',
-            is_aws_igenome,
-            ch_fasta.map { [ [:], it ] }
+            ch_fasta.map { [ [:], it ] },
+            ch_transcript_fasta.map { [ [:], it ] }
         )
-        ch_genome_bam          = ALIGN_STAR.out.bam
-        ch_genome_bam_index    = ALIGN_STAR.out.bai
-        ch_transcriptome_bam   = ALIGN_STAR.out.bam_transcript
-        ch_star_log            = ALIGN_STAR.out.log_final
-        ch_unaligned_sequences = ALIGN_STAR.out.fastq
-        ch_multiqc_files = ch_multiqc_files.mix(ch_star_log.collect{it[1]})
+
+        ch_genome_bam              = FASTQ_ALIGN_STAR.out.bam
+        ch_genome_bam_index        = FASTQ_ALIGN_STAR.out.bai
+        ch_transcriptome_bam       = FASTQ_ALIGN_STAR.out.orig_bam_transcript
+        ch_transcriptome_bai       = FASTQ_ALIGN_STAR.out.bai_transcript
+        ch_versions                = ch_versions.mix(FASTQ_ALIGN_STAR.out.versions)
+
+        ch_multiqc_files = ch_multiqc_files
+            .mix(FASTQ_ALIGN_STAR.out.stats.collect{it[1]})
+            .mix(FASTQ_ALIGN_STAR.out.flagstat.collect{it[1]})
+            .mix(FASTQ_ALIGN_STAR.out.idxstats.collect{it[1]})
+            .mix(FASTQ_ALIGN_STAR.out.log_final.collect{it[1]})
 
         if (params.bam_csi_index) {
-            ch_genome_bam_index = ALIGN_STAR.out.csi
+            ch_genome_bam_index = FASTQ_ALIGN_STAR.out.csi
         }
-        ch_versions = ch_versions.mix(ALIGN_STAR.out.versions)
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_STAR.out.versions)
 
         //
         // SUBWORKFLOW: Remove duplicate reads from BAM file based on UMIs
@@ -225,9 +210,9 @@ workflow LNCPIPE {
             // them straight out of the aligner otherwise
 
             ch_multiqc_files = ch_multiqc_files
-                .mix(ALIGN_STAR.out.stats.collect{it[1]})
-                .mix(ALIGN_STAR.out.flagstat.collect{it[1]})
-                .mix(ALIGN_STAR.out.idxstats.collect{it[1]})
+                .mix(FASTQ_ALIGN_STAR.out.stats.collect{it[1]})
+                .mix(FASTQ_ALIGN_STAR.out.flagstat.collect{it[1]})
+                .mix(FASTQ_ALIGN_STAR.out.idxstats.collect{it[1]})
         }
 
     }

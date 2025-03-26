@@ -167,7 +167,7 @@ workflow LNCPIPE {
 * Step 5: Transcript assembly using Stringtie and merge gtf into one
 */
      STRINGTIE_WORKFLOW (
-         aligned_reads_ch,
+         ch_genome_bam,
          ch_gtf
      )
      ch_versions = ch_versions.mix(STRINGTIE_WORKFLOW.out.versions) 

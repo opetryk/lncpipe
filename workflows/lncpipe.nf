@@ -19,7 +19,7 @@ include { FASTQ_ALIGN_STAR                      } from '../subworkflows/nf-core/
 include { FASTQ_ALIGN_HISAT2                    } from '../subworkflows/nf-core/fastq_align_hisat2'
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_STAR   } from '../subworkflows/nf-core/bam_dedup_umi' // I would like to not import these as 2 and just have 1 workflow able to work with both star and hisat2 data.
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_HISAT2 } from '../subworkflows/nf-core/bam_dedup_umi'
-include { STRINGTIE_WORKFLOW                    }   from '../subworkflows/local/stringtie_workflow'
+include { STRINGTIE_WORKFLOW                    } from '../subworkflows/local/stringtie_workflow'
 
 
 /*
@@ -98,17 +98,6 @@ workflow LNCPIPE {
             meta, num_reads ->
                 return [ meta.id, num_reads > params.min_trimmed_reads.toFloat() ]
         }
-
-    //
-    // Collate and save software versions
-    //
-    softwareVersionsToYAML(ch_versions)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_'  +  'lncpipe_software_'  + 'mqc_'  + 'versions.yml',
-            sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
 
     /*
     * Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
@@ -383,6 +372,18 @@ workflow LNCPIPE {
     //     SECONDARY_STATISTICS.out.stats,
     //     expression_matrix_ch
     // )
+
+    //
+    // Collate and save software versions
+    //
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline_info",
+            name: 'nf_core_'  +  'lncpipe_software_'  + 'mqc_'  + 'versions.yml',
+            sort: true,
+            newLine: true
+        ).set { ch_collated_versions }
+
 
 
     //

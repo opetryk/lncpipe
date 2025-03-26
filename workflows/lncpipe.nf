@@ -19,7 +19,7 @@ include { FASTQ_ALIGN_STAR                      } from '../subworkflows/nf-core/
 include { FASTQ_ALIGN_HISAT2                    } from '../subworkflows/nf-core/fastq_align_hisat2'
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_STAR   } from '../subworkflows/nf-core/bam_dedup_umi' // I would like to not import these as 2 and just have 1 workflow able to work with both star and hisat2 data.
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_HISAT2 } from '../subworkflows/nf-core/bam_dedup_umi'
-include { STRINGTIE_WORKFLOW                    } from '../subworkflows/local/stringtie_workflow'
+include { STRINGTIE_WORKFLOW                    } from '../subworkflows/local/stringtie/stringtie_workflow'
 
 
 /*

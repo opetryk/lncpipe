@@ -421,6 +421,33 @@
         },
         "extra_fastp_args": {
             "type": "string"
+        },
+        "pseudo_aligner_kmer_size": {
+            "type": "integer",
+            "default": 31
+        },
+        "seq_center": {
+            "type": "string"
+        },
+        "star_ignore_sjdbgtf": {
+            "type": "boolean"
+        },
+        "kallisto_quant_fraglen": {
+            "type": "integer",
+            "default": 200
+        },
+        "kallisto_quant_fraglen_sd": {
+            "type": "integer",
+            "default": 200
+        },
+        "save_unaligned": {
+            "type": "boolean"
+        },
+        "save_align_intermeds": {
+            "type": "boolean"
+        },
+        "skip_markduplicates": {
+            "type": "boolean"
         }
     }
 }

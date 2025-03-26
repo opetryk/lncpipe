@@ -27,6 +27,7 @@ workflow LNCPIPE {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    ch_versions          // channel: [ path(versions.yml) ]
     ch_fasta             // channel: path(genome.fasta)
     ch_gtf               // channel: path(genome.gtf)
     ch_fai               // channel: path(genome.fai)
@@ -45,27 +46,7 @@ workflow LNCPIPE {
     make_sortmerna_index // boolean: Whether to create an index before running sortmerna
     main:
 
-    ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
-
-    //
-    // Create channel from input file provided through params.input
-    //
-    Channel
-        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
-        }
-        .groupTuple()
-        .map { samplesheet ->
-            checkSamplesAfterGrouping(samplesheet)
-        }
-        .set { ch_fastq }
 
 // Checking parameters
 // ...
@@ -103,7 +84,7 @@ workflow LNCPIPE {
     salmon_index_available = params.salmon_index || (!params.skip_pseudo_alignment && params.pseudo_aligner == 'salmon')
 
     FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS (
-        ch_fastq,
+        ch_samplesheet,
         ch_fasta,
         ch_transcript_fasta,
         ch_gtf,
@@ -143,11 +124,11 @@ workflow LNCPIPE {
     //
     // MODULE: Run FastQC
     //
-    FASTQC (
-        ch_samplesheet
-    )
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    // FASTQC (
+    //     ch_samplesheet
+    // )
+    // ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
+    // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     // Collate and save software versions

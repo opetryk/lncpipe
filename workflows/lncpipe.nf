@@ -168,16 +168,183 @@ workflow LNCPIPE {
 /*
 * Step 2: Build read aligner (STAR/tophat/HISAT2) index, if not provided
 */
-/*
-* Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
-*/
-    // if (params.aligner == 'star') {
-    //     STAR_ALIGN(read_pairs_ch, params.fasta, params.star_index)
-    //     aligned_reads_ch = STAR_ALIGN.out.bam
-    // } else if (params.aligner == 'hisat2') {
-    //     HISAT2_ALIGN(read_pairs_ch, params.fasta, params.hisat2_index)
-    //     aligned_reads_ch = HISAT2_ALIGN.out.bam
-    // }
+    /*
+    * Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
+    */
+
+    //
+    // SUBWORKFLOW: Alignment with STAR and gene/transcript quantification with Salmon
+    //
+    ch_genome_bam          = Channel.empty()
+    ch_genome_bam_index    = Channel.empty()
+    ch_star_log            = Channel.empty()
+    ch_unaligned_sequences = Channel.empty()
+    ch_transcriptome_bam   = Channel.empty()
+
+    if (!params.skip_alignment && params.aligner == 'star') {
+        // Check if an AWS iGenome has been provided to use the appropriate version of STAR
+        def is_aws_igenome = false
+        if (params.fasta && params.gtf) {
+            if ((file(params.fasta).getName() - '.gz' == 'genome.fa') && (file(params.gtf).getName() - '.gz' == 'genes.gtf')) {
+                is_aws_igenome = true
+            }
+        }
+
+        ALIGN_STAR (
+            ch_strand_inferred_filtered_fastq,
+            ch_star_index.map { [ [:], it ] },
+            ch_gtf.map { [ [:], it ] },
+            params.star_ignore_sjdbgtf,
+            '',
+            params.seq_center ?: '',
+            is_aws_igenome,
+            ch_fasta.map { [ [:], it ] }
+        )
+        ch_genome_bam          = ALIGN_STAR.out.bam
+        ch_genome_bam_index    = ALIGN_STAR.out.bai
+        ch_transcriptome_bam   = ALIGN_STAR.out.bam_transcript
+        ch_star_log            = ALIGN_STAR.out.log_final
+        ch_unaligned_sequences = ALIGN_STAR.out.fastq
+        ch_multiqc_files = ch_multiqc_files.mix(ch_star_log.collect{it[1]})
+
+        if (params.bam_csi_index) {
+            ch_genome_bam_index = ALIGN_STAR.out.csi
+        }
+        ch_versions = ch_versions.mix(ALIGN_STAR.out.versions)
+
+        //
+        // SUBWORKFLOW: Remove duplicate reads from BAM file based on UMIs
+        //
+        if (params.with_umi) {
+
+            BAM_DEDUP_UMI_STAR(
+                ch_genome_bam.join(ch_genome_bam_index, by: [0]),
+                ch_fasta.map { [ [:], it ] },
+                params.umi_dedup_tool,
+                params.umitools_dedup_stats,
+                params.bam_csi_index,
+                ch_transcriptome_bam,
+                ch_transcript_fasta.map { [ [:], it ] }
+            )
+
+            ch_genome_bam        = BAM_DEDUP_UMI_STAR.out.bam
+            ch_transcriptome_bam = BAM_DEDUP_UMI_STAR.out.transcriptome_bam
+            ch_genome_bam_index  = BAM_DEDUP_UMI_STAR.out.bai
+            ch_versions          = ch_versions.mix(BAM_DEDUP_UMI_STAR.out.versions)
+
+            ch_multiqc_files = ch_multiqc_files
+                .mix(BAM_DEDUP_UMI_STAR.out.multiqc_files)
+
+        } else {
+            // The deduplicated stats should take priority for MultiQC, but use
+            // them straight out of the aligner otherwise
+
+            ch_multiqc_files = ch_multiqc_files
+                .mix(ALIGN_STAR.out.stats.collect{it[1]})
+                .mix(ALIGN_STAR.out.flagstat.collect{it[1]})
+                .mix(ALIGN_STAR.out.idxstats.collect{it[1]})
+        }
+
+    }
+
+    //
+    // SUBWORKFLOW: Alignment with HISAT2
+    //
+    if (!params.skip_alignment && params.aligner == 'hisat2') {
+        FASTQ_ALIGN_HISAT2 (
+            ch_strand_inferred_filtered_fastq,
+            ch_hisat2_index.map { [ [:], it ] },
+            ch_splicesites.map { [ [:], it ] },
+            ch_fasta.map { [ [:], it ] }
+        )
+        ch_genome_bam          = FASTQ_ALIGN_HISAT2.out.bam
+        ch_genome_bam_index    = FASTQ_ALIGN_HISAT2.out.bai
+        ch_unaligned_sequences = FASTQ_ALIGN_HISAT2.out.fastq
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_ALIGN_HISAT2.out.summary.collect{it[1]})
+
+        if (params.bam_csi_index) {
+            ch_genome_bam_index = FASTQ_ALIGN_HISAT2.out.csi
+        }
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_HISAT2.out.versions)
+
+        //
+        // SUBWORKFLOW: Remove duplicate reads from BAM file based on UMIs
+        //
+
+        if (params.with_umi) {
+
+            BAM_DEDUP_UMI_HISAT2(
+                ch_genome_bam.join(ch_genome_bam_index, by: [0]),
+                ch_fasta.map { [ [:], it ] },
+                params.umi_dedup_tool,
+                params.umitools_dedup_stats,
+                params.bam_csi_index,
+                ch_transcriptome_bam,
+                ch_transcript_fasta.map { [ [:], it ] }
+            )
+
+            ch_genome_bam        = BAM_DEDUP_UMI_HISAT2.out.bam
+            ch_genome_bam_index  = BAM_DEDUP_UMI_HISAT2.out.bai
+            ch_versions          = ch_versions.mix(BAM_DEDUP_UMI_HISAT2.out.versions)
+
+            ch_multiqc_files = ch_multiqc_files
+                .mix(BAM_DEDUP_UMI_HISAT2.out.multiqc_files)
+        } else {
+
+            // The deduplicated stats should take priority for MultiQC, but use
+            // them straight out of the aligner otherwise
+            ch_multiqc_files = ch_multiqc_files
+                .mix(FASTQ_ALIGN_HISAT2.out.stats.collect{it[1]})
+                .mix(FASTQ_ALIGN_HISAT2.out.flagstat.collect{it[1]})
+                .mix(FASTQ_ALIGN_HISAT2.out.idxstats.collect{it[1]})
+        }
+    }
+
+    //
+    // Filter channels to get samples that passed STAR minimum mapping percentage
+    //
+    if (!params.skip_alignment && params.aligner.contains('star')) {
+        ch_star_log
+            .map { meta, align_log -> [ meta ] + getStarPercentMapped(params, align_log) }
+            .set { ch_percent_mapped }
+
+        // Save status for workflow summary
+        ch_map_status = ch_percent_mapped
+            .map {
+                meta, mapped, pass ->
+                    return [ meta.id, pass ]
+            }
+
+        ch_genome_bam
+            .join(ch_percent_mapped, by: [0])
+            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
+            .set { ch_genome_bam }
+
+        ch_genome_bam_index
+            .join(ch_percent_mapped, by: [0])
+            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
+            .set { ch_genome_bam_index }
+
+        ch_percent_mapped
+            .branch { meta, mapped, pass ->
+                pass: pass
+                    return [ "$meta.id\t$mapped" ]
+                fail: !pass
+                    return [ "$meta.id\t$mapped" ]
+            }
+            .set { ch_pass_fail_mapped }
+
+        ch_pass_fail_mapped
+            .fail
+            .collect()
+            .map {
+                tsv_data ->
+                    def header = ["Sample", "STAR uniquely mapped reads (%)"]
+                    sample_status_header_multiqc.text + multiqcTsvFromList(tsv_data, header)
+            }
+            .set { ch_fail_mapping_multiqc }
+        ch_multiqc_files = ch_multiqc_files.mix(ch_fail_mapping_multiqc.collectFile(name: 'fail_mapped_samples_mqc.tsv'))
+    }
 
 
 /*

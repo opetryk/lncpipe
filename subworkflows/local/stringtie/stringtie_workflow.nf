@@ -24,10 +24,10 @@ workflow STRINGTIE_WORKFLOW {
 
         STRINGTIE_MERGE (stringtie_gtf, ch_gtf.map { meta, gtf -> [ gtf ]})
         ch_versions = ch_versions.mix(STRINGTIE_MERGE.out.versions)
-        ch_stringtie_gtf = STRINGTIE_MERGE.out.gtf
+        ch_stringtie_gtf_merged = STRINGTIE_MERGE.out.gtf
 
     emit:
-        stringtie_gtf = ch_stringtie_gtf.ifEmpty(null)
+        stringtie_gtf_merged = ch_stringtie_gtf_merged.ifEmpty(null).collect()
         versions      = ch_versions
 
     }

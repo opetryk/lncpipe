@@ -298,7 +298,7 @@ workflow LNCPIPE {
 /*
 * Step 6: Compare assembled gtf with known annotations
 */
-    GFFCOMPARE(ch_merged_gtf, ch_gtf)
+    GFFCOMPARE(ch_merged_gtf, ch_fasta, ch_gtf)
     ch_versions = ch_versions.mix(GFFCOMPARE.out.versions)
 
 /*

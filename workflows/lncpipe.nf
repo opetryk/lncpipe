@@ -293,7 +293,7 @@ workflow LNCPIPE {
         ch_gtf
     )
     ch_versions = ch_versions.mix(STRINGTIE_WORKFLOW.out.versions)
-    ch_merged_gtf = STRINGTIE_WORKFLOW.out.merged_gtf
+    ch_merged_gtf = STRINGTIE_WORKFLOW.out.stringtie_gtf_merged
 
 /*
 * Step 6: Compare assembled gtf with known annotations

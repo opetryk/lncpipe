@@ -15,11 +15,6 @@
                         "git_sha": "c03f4019225fce21c11f194ff32eca396963f305",
                         "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
                     },
-                    "fastp": {
-                        "branch": "master",
-                        "git_sha": "df6f67c19f76671b42ffa395cd2fde8958111eba",
-                        "installed_by": ["fastq_fastqc_umitools_fastp"]
-                    },
                     "custom/catadditionalfasta": {
                         "branch": "master",
                         "git_sha": "a1abf90966a2a4016d3c3e41e228bfcbd4811ccc",
@@ -29,6 +24,11 @@
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["modules"]
+                    },
+                    "fastp": {
+                        "branch": "master",
+                        "git_sha": "df6f67c19f76671b42ffa395cd2fde8958111eba",
+                        "installed_by": ["fastq_fastqc_umitools_fastp"]
                     },
                     "fastqc": {
                         "branch": "master",
@@ -75,6 +75,11 @@
                         "git_sha": "f0719ae309075ae4a291533883847c3f7c441dad",
                         "installed_by": ["modules"]
                     },
+                    "rsem/preparereference": {
+                        "branch": "master",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "installed_by": ["modules"]
+                    },
                     "salmon/index": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
@@ -85,15 +90,15 @@
                         "git_sha": "85b5f8a0d9df9ce7587af50e2ee75b37c97515c6",
                         "installed_by": ["fastq_subsample_fq_salmon"]
                     },
-                    "rsem/preparereference": {
-                        "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
-                        "installed_by": ["modules"]
-                    },
                     "sortmerna": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
+                    "star/genomegenerate": {
+                        "branch": "master",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "installed_by": ["modules"]
                     },
                     "trimgalore": {
                         "branch": "master",
@@ -104,11 +109,6 @@
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["fastq_fastqc_umitools_fastp", "fastq_fastqc_umitools_trimgalore"]
-                    },
-                    "star/genomegenerate": {
-                        "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
-                        "installed_by": ["modules"]
                     },
                     "untar": {
                         "branch": "master",

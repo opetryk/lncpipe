@@ -5,6 +5,8 @@
 */
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { STAR_GENOMEGENERATE    } from '../modules/nf-core/star/genomegenerate/main'
+include { GFFCOMPARE             } from '../modules/nf-core/gffcompare/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -162,26 +164,20 @@ workflow LNCPIPE {
 
 
 /*
-* Step 5: Transcript assembly using Stringtie
+* Step 5: Transcript assembly using Stringtie and merge gtf into one
 */
-/*
-* Step 6: Merged GTFs into one
-*/
-    // if (params.aligner == 'hisat2') {
-    // STRINGTIE_ASSEMBLY(aligned_reads_ch, params.gtf)
-    // STRINGTIE_MERGE(STRINGTIE_ASSEMBLY.out.gtf.collect(), params.fasta)
-    // merged_gtf_ch = STRINGTIE_MERGE.out.merged_gtf
-    // } else {
-    // CUFFLINKS_ASSEMBLY(aligned_reads_ch, params.fasta, params.gtf)
-    // CUFFMERGE(CUFFLINKS_ASSEMBLY.out.gtf.collect(), params.fasta)
-    // merged_gtf_ch = CUFFMERGE.out.merged_gtf
-    // }
+     STRINGTIE_WORKFLOW (
+         aligned_reads_ch,
+         ch_gtf
+     )
+     ch_versions = ch_versions.mix(STRINGTIE_WORKFLOW.out.versions) 
+     ch_merged_gtf = STRINGTIE_WORKFLOW.out.merged_gtf
 
 /*
-* Step 7: Compare assembled gtf with known annotations (GENCODE)
+* Step 6: Compare assembled gtf with known annotations
 */
-    //GFFCOMPARE(merged_gtf_ch, params.gtf)
-
+    GFFCOMPARE(ch_merged_gtf, ch_gtf)
+    ch_versions = ch_versions.mix(GFFCOMPARE.out.versions)
 
 /*
 * Step 8: Filter GTFs to distinguish novel lncRNAs

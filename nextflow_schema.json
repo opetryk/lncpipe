@@ -448,6 +448,9 @@
         },
         "skip_markduplicates": {
             "type": "boolean"
+        },
+        "extra_star_align_args": {
+            "type": "string"
         }
     }
 }

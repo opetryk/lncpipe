@@ -37,8 +37,7 @@ workflow LNCPIPE {
     ch_star_index        // channel: path(star/index/)
     ch_rsem_index        // channel: path(rsem/index/)
     ch_hisat2_index      // channel: path(hisat2/index/)
-    ch_salmon_index      // channel: path(salmon/index/)
-    ch_kallisto_index    // channel: [ meta, path(kallisto/index/) ]
+    ch_kallisto_index    // channel: [ meta, path(kallisto/index/) ] // this should not be ready yet..
     ch_bbsplit_index     // channel: path(bbsplit/index/)
     ch_ribo_db           // channel: path(sortmerna_fasta_list)
     ch_sortmerna_index   // channel: path(sortmerna/index/)

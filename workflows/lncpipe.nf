@@ -4,14 +4,13 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
-include { STAR_GENOMEGENERATE                   } from '../modules/nf-core/star/genomegenerate/main'
 include { GFFCOMPARE                            } from '../modules/nf-core/gffcompare/main'
+include { FASTQ_ALIGN_STAR                      } from '../subworkflows/nf-core/fastq_align_star/main'
+include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap                      } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc                  } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText                } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
-include { checkSamplesAfterGrouping             } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { samplesheetToList                     } from 'plugin/nf-schema'
 include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness'
 
@@ -19,6 +18,11 @@ include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { STRINGTIE_WORKFLOW                    }   from '../subworkflows/local/stringtie_workflow'
+include { samplesheetToList                     } from 'plugin/nf-schema'
+include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness'
+include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_STAR   } from '../subworkflows/nf-core/bam_dedup_umi' // I would like to not import these as 2 and just have 1 workflow able to work with both star and hisat2 data.
+include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_HISAT2 } from '../subworkflows/nf-core/bam_dedup_umi'
+include { FASTQ_ALIGN_HISAT2                    } from '../subworkflows/nf-core/fastq_align_hisat2'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,7 +45,7 @@ workflow LNCPIPE {
     ch_rsem_index        // channel: path(rsem/index/)
     ch_hisat2_index      // channel: path(hisat2/index/)
     ch_salmon_index      // channel: path(salmon/index/)
-    ch_kallisto_index    // channel: [ meta, path(kallisto/index/) ]
+    ch_kallisto_index    // channel: [ meta, path(kallisto/index/) ] // this should not be ready yet..
     ch_bbsplit_index     // channel: path(bbsplit/index/)
     ch_ribo_db           // channel: path(sortmerna_fasta_list)
     ch_sortmerna_index   // channel: path(sortmerna/index/)
@@ -50,33 +54,6 @@ workflow LNCPIPE {
     main:
 
     ch_multiqc_files = Channel.empty()
-
-// Checking parameters
-// ...
-
-
-
-
-
-/*
-* Step 3: QC (FastQC/AfterQC/Fastp) of raw reads
-*/
-
-    //
-    // MODULE: FASTP
-    //
-    // ch_adapters = params.adapters ? params.adapters : []
-
-    // FASTP (
-    //     ch_samplesheet,
-    //     ch_adapters,
-    //     params.discard_trimmed_pass,
-    //     params.save_trimmed_fail,
-    //     params.save_merged
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]}.ifEmpty([]))
-    // ch_versions      = ch_versions.mix(FASTP.out.versions.first())
-
 
     //
     // Run RNA-seq FASTQ preprocessing subworkflow
@@ -125,15 +102,6 @@ workflow LNCPIPE {
         }
 
     //
-    // MODULE: Run FastQC
-    //
-    // FASTQC (
-    //     ch_samplesheet
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-
-    //
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
@@ -144,29 +112,190 @@ workflow LNCPIPE {
             newLine: true
         ).set { ch_collated_versions }
 
+    /*
+    * Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
+    */
 
-    // AFTERQC(read_pairs_ch)
-    // qc_ch = AFTERQC.out.html
-    // read_pairs_ch = AFTERQC.out.reads
+    //
+    // SUBWORKFLOW: Alignment with STAR and gene/transcript quantification with Salmon
+    //
 
+    ch_genome_bam          = Channel.empty()
+    ch_genome_bam_index    = Channel.empty()
+    ch_star_log            = Channel.empty()
+    ch_unaligned_sequences = Channel.empty()
+    ch_transcriptome_bam   = Channel.empty()
 
+    if (!params.skip_alignment && params.aligner == 'star') {
+        // Check if an AWS iGenome has been provided to use the appropriate version of STAR
+        def is_aws_igenome = false
+        if (params.fasta && params.gtf) {
+            if ((file(params.fasta).getName() - '.gz' == 'genome.fa') && (file(params.gtf).getName() - '.gz' == 'genes.gtf')) {
+                is_aws_igenome = true
+            }
+        }
 
-/*
-* Step 1: Prepare Annotations
-*/
-/*
-* Step 2: Build read aligner (STAR/tophat/HISAT2) index, if not provided
-*/
-/*
-* Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
-*/
-    // if (params.aligner == 'star') {
-    //     STAR_ALIGN(read_pairs_ch, params.fasta, params.star_index)
-    //     aligned_reads_ch = STAR_ALIGN.out.bam
-    // } else if (params.aligner == 'hisat2') {
-    //     HISAT2_ALIGN(read_pairs_ch, params.fasta, params.hisat2_index)
-    //     aligned_reads_ch = HISAT2_ALIGN.out.bam
-    // }
+        FASTQ_ALIGN_STAR(
+            FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS.out.reads,
+            ch_star_index.map { [ [:], it ] },
+            ch_gtf.map { [ [:], it ] },
+            params.star_ignore_sjdbgtf,
+            '',
+            params.seq_center ?: '',
+            ch_fasta.map { [ [:], it ] },
+            ch_transcript_fasta.map { [ [:], it ] }
+        )
+
+        ch_genome_bam              = FASTQ_ALIGN_STAR.out.bam
+        ch_genome_bam_index        = FASTQ_ALIGN_STAR.out.bai
+        ch_transcriptome_bam       = FASTQ_ALIGN_STAR.out.orig_bam_transcript
+        ch_transcriptome_bai       = FASTQ_ALIGN_STAR.out.bai_transcript
+        ch_versions                = ch_versions.mix(FASTQ_ALIGN_STAR.out.versions)
+
+        ch_multiqc_files = ch_multiqc_files
+            .mix(FASTQ_ALIGN_STAR.out.stats.collect{it[1]})
+            .mix(FASTQ_ALIGN_STAR.out.flagstat.collect{it[1]})
+            .mix(FASTQ_ALIGN_STAR.out.idxstats.collect{it[1]})
+            .mix(FASTQ_ALIGN_STAR.out.log_final.collect{it[1]})
+
+        if (params.bam_csi_index) {
+            ch_genome_bam_index = FASTQ_ALIGN_STAR.out.csi
+        }
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_STAR.out.versions)
+
+        //
+        // SUBWORKFLOW: Remove duplicate reads from BAM file based on UMIs
+        //
+        if (params.with_umi) {
+
+            BAM_DEDUP_UMI_STAR(
+                ch_genome_bam.join(ch_genome_bam_index, by: [0]),
+                ch_fasta.map { [ [:], it ] },
+                params.umi_dedup_tool,
+                params.umitools_dedup_stats,
+                params.bam_csi_index,
+                ch_transcriptome_bam,
+                ch_transcript_fasta.map { [ [:], it ] }
+            )
+
+            ch_genome_bam        = BAM_DEDUP_UMI_STAR.out.bam
+            ch_transcriptome_bam = BAM_DEDUP_UMI_STAR.out.transcriptome_bam
+            ch_genome_bam_index  = BAM_DEDUP_UMI_STAR.out.bai
+            ch_versions          = ch_versions.mix(BAM_DEDUP_UMI_STAR.out.versions)
+
+            ch_multiqc_files = ch_multiqc_files
+                .mix(BAM_DEDUP_UMI_STAR.out.multiqc_files)
+
+        } else {
+            // The deduplicated stats should take priority for MultiQC, but use
+            // them straight out of the aligner otherwise
+
+            ch_multiqc_files = ch_multiqc_files
+                .mix(FASTQ_ALIGN_STAR.out.stats.collect{it[1]})
+                .mix(FASTQ_ALIGN_STAR.out.flagstat.collect{it[1]})
+                .mix(FASTQ_ALIGN_STAR.out.idxstats.collect{it[1]})
+        }
+
+    }
+
+    //
+    // SUBWORKFLOW: Alignment with HISAT2
+    //
+    if (!params.skip_alignment && params.aligner == 'hisat2') {
+        FASTQ_ALIGN_HISAT2 (
+            ch_strand_inferred_filtered_fastq,
+            ch_hisat2_index.map { [ [:], it ] },
+            ch_splicesites.map { [ [:], it ] },
+            ch_fasta.map { [ [:], it ] }
+        )
+        ch_genome_bam          = FASTQ_ALIGN_HISAT2.out.bam
+        ch_genome_bam_index    = FASTQ_ALIGN_HISAT2.out.bai
+        ch_unaligned_sequences = FASTQ_ALIGN_HISAT2.out.fastq
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_ALIGN_HISAT2.out.summary.collect{it[1]})
+
+        if (params.bam_csi_index) {
+            ch_genome_bam_index = FASTQ_ALIGN_HISAT2.out.csi
+        }
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_HISAT2.out.versions)
+
+        //
+        // SUBWORKFLOW: Remove duplicate reads from BAM file based on UMIs
+        //
+
+        if (params.with_umi) {
+
+            BAM_DEDUP_UMI_HISAT2(
+                ch_genome_bam.join(ch_genome_bam_index, by: [0]),
+                ch_fasta.map { [ [:], it ] },
+                params.umi_dedup_tool,
+                params.umitools_dedup_stats,
+                params.bam_csi_index,
+                ch_transcriptome_bam,
+                ch_transcript_fasta.map { [ [:], it ] }
+            )
+
+            ch_genome_bam        = BAM_DEDUP_UMI_HISAT2.out.bam
+            ch_genome_bam_index  = BAM_DEDUP_UMI_HISAT2.out.bai
+            ch_versions          = ch_versions.mix(BAM_DEDUP_UMI_HISAT2.out.versions)
+
+            ch_multiqc_files = ch_multiqc_files
+                .mix(BAM_DEDUP_UMI_HISAT2.out.multiqc_files)
+        } else {
+
+            // The deduplicated stats should take priority for MultiQC, but use
+            // them straight out of the aligner otherwise
+            ch_multiqc_files = ch_multiqc_files
+                .mix(FASTQ_ALIGN_HISAT2.out.stats.collect{it[1]})
+                .mix(FASTQ_ALIGN_HISAT2.out.flagstat.collect{it[1]})
+                .mix(FASTQ_ALIGN_HISAT2.out.idxstats.collect{it[1]})
+        }
+    }
+
+    //
+    // Filter channels to get samples that passed STAR minimum mapping percentage
+    //
+    if (!params.skip_alignment && params.aligner.contains('star')) {
+        ch_star_log
+            .map { meta, align_log -> [ meta ] + getStarPercentMapped(params, align_log) }
+            .set { ch_percent_mapped }
+
+        // Save status for workflow summary
+        ch_map_status = ch_percent_mapped
+            .map {
+                meta, mapped, pass ->
+                    return [ meta.id, pass ]
+            }
+
+        ch_genome_bam
+            .join(ch_percent_mapped, by: [0])
+            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
+            .set { ch_genome_bam }
+
+        ch_genome_bam_index
+            .join(ch_percent_mapped, by: [0])
+            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
+            .set { ch_genome_bam_index }
+
+        ch_percent_mapped
+            .branch { meta, mapped, pass ->
+                pass: pass
+                    return [ "$meta.id\t$mapped" ]
+                fail: !pass
+                    return [ "$meta.id\t$mapped" ]
+            }
+            .set { ch_pass_fail_mapped }
+
+        ch_pass_fail_mapped
+            .fail
+            .collect()
+            .map {
+                tsv_data ->
+                    def header = ["Sample", "STAR uniquely mapped reads (%)"]
+                    sample_status_header_multiqc.text + multiqcTsvFromList(tsv_data, header)
+            }
+            .set { ch_fail_mapping_multiqc }
+        ch_multiqc_files = ch_multiqc_files.mix(ch_fail_mapping_multiqc.collectFile(name: 'fail_mapped_samples_mqc.tsv'))
+    }
 
 
 /*

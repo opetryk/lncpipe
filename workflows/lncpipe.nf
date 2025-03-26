@@ -301,12 +301,12 @@ workflow LNCPIPE {
 /*
 * Step 5: Transcript assembly using Stringtie and merge gtf into one
 */
-     STRINGTIE_WORKFLOW (
-         ch_genome_bam,
-         ch_gtf
-     )
-     ch_versions = ch_versions.mix(STRINGTIE_WORKFLOW.out.versions) 
-     ch_merged_gtf = STRINGTIE_WORKFLOW.out.merged_gtf
+    STRINGTIE_WORKFLOW (
+        ch_genome_bam,
+        ch_gtf
+    )
+    ch_versions = ch_versions.mix(STRINGTIE_WORKFLOW.out.versions)
+    ch_merged_gtf = STRINGTIE_WORKFLOW.out.merged_gtf
 
 /*
 * Step 6: Compare assembled gtf with known annotations

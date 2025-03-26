@@ -45,6 +45,11 @@
                         "git_sha": "6d7806c166ec5e19f9681b8f86e2c68bc86b34ca",
                         "installed_by": ["fastq_subsample_fq_salmon"]
                     },
+                    "gffcompare": {
+                        "branch": "master",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "installed_by": ["modules"]
+                    },
                     "gffread": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
@@ -71,11 +76,6 @@
                         "installed_by": ["modules"]
                     },
                     "kallisto/index": {
-                        "branch": "master",
-                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
-                        "installed_by": ["modules"]
-                    },
-                    "gffcompare": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["modules"]

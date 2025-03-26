@@ -11,6 +11,7 @@ include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pi
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { checkSamplesAfterGrouping  } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { samplesheetToList                } from 'plugin/nf-schema'
+include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -42,25 +43,6 @@ workflow LNCPIPE {
 
     ch_multiqc_files = Channel.empty()
 
-    //
-    // Create channel from input file provided through params.input
-    //
-    Channel
-        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
-        }
-        .groupTuple()
-        .map { samplesheet ->
-            checkSamplesAfterGrouping(samplesheet)
-        }
-        .set { ch_fastq }
-
 // Checking parameters
 // ...
 
@@ -89,13 +71,59 @@ workflow LNCPIPE {
 
 
     //
+    // Run RNA-seq FASTQ preprocessing subworkflow
+    //
+
+    // The subworkflow only has to do Salmon indexing if it discovers 'auto'
+    // samples, and if we haven't already made one elsewhere
+    salmon_index_available = params.salmon_index || (!params.skip_pseudo_alignment && params.pseudo_aligner == 'salmon')
+
+    FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS (
+        ch_samplesheet,
+        ch_fasta,
+        ch_transcript_fasta,
+        ch_gtf,
+        ch_salmon_index,
+        ch_sortmerna_index,
+        ch_bbsplit_index,
+        ch_ribo_db,
+        params.skip_bbsplit,
+        params.skip_fastqc || params.skip_qc,
+        params.skip_trimming,
+        params.skip_umi_extract,
+        !salmon_index_available,
+        !params.sortmerna_index && params.remove_ribo_rna,
+        params.trimmer,
+        params.min_trimmed_reads,
+        params.save_trimmed,
+        params.remove_ribo_rna,
+        params.with_umi,
+        params.umi_discard_read,
+        params.stranded_threshold,
+        params.unstranded_threshold,
+        params.skip_linting,
+        false
+    )
+
+    ch_multiqc_files                  = ch_multiqc_files.mix(FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS.out.multiqc_files)
+    ch_versions                       = ch_versions.mix(FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS.out.versions)
+    ch_strand_inferred_filtered_fastq = FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS.out.reads
+    ch_trim_read_count                = FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS.out.trim_read_count
+
+    ch_trim_status = ch_trim_read_count
+        .map {
+            meta, num_reads ->
+                return [ meta.id, num_reads > params.min_trimmed_reads.toFloat() ]
+        }
+
+    //
     // MODULE: Run FastQC
     //
-    FASTQC (
-        ch_samplesheet
-    )
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    // FASTQC (
+    //     ch_samplesheet
+    // )
+    // ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
+    // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     // Collate and save software versions

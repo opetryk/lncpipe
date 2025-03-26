@@ -8,7 +8,17 @@
                     "bbmap/bbsplit": {
                         "branch": "master",
                         "git_sha": "f06465ff69516528b0178b2a2a5f6b1d4287faa9",
-                        "installed_by": ["modules"]
+                        "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
+                    "cat/fastq": {
+                        "branch": "master",
+                        "git_sha": "c03f4019225fce21c11f194ff32eca396963f305",
+                        "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
+                    "fastp": {
+                        "branch": "master",
+                        "git_sha": "df6f67c19f76671b42ffa395cd2fde8958111eba",
+                        "installed_by": ["fastq_fastqc_umitools_fastp"]
                     },
                     "custom/catadditionalfasta": {
                         "branch": "master",
@@ -23,7 +33,17 @@
                     "fastqc": {
                         "branch": "master",
                         "git_sha": "08108058ea36a63f141c25c4e75f9f872a5b2296",
-                        "installed_by": ["modules"]
+                        "installed_by": ["fastq_fastqc_umitools_fastp", "fastq_fastqc_umitools_trimgalore", "modules"]
+                    },
+                    "fq/lint": {
+                        "branch": "master",
+                        "git_sha": "6d7806c166ec5e19f9681b8f86e2c68bc86b34ca",
+                        "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
+                    "fq/subsample": {
+                        "branch": "master",
+                        "git_sha": "6d7806c166ec5e19f9681b8f86e2c68bc86b34ca",
+                        "installed_by": ["fastq_subsample_fq_salmon"]
                     },
                     "gffread": {
                         "branch": "master",
@@ -55,12 +75,17 @@
                         "git_sha": "f0719ae309075ae4a291533883847c3f7c441dad",
                         "installed_by": ["modules"]
                     },
-                    "rsem/preparereference": {
+                    "salmon/index": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
-                        "installed_by": ["modules"]
+                        "installed_by": ["fastq_subsample_fq_salmon"]
                     },
-                    "salmon/index": {
+                    "salmon/quant": {
+                        "branch": "master",
+                        "git_sha": "85b5f8a0d9df9ce7587af50e2ee75b37c97515c6",
+                        "installed_by": ["fastq_subsample_fq_salmon"]
+                    },
+                    "rsem/preparereference": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
                         "installed_by": ["modules"]
@@ -68,7 +93,17 @@
                     "sortmerna": {
                         "branch": "master",
                         "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
-                        "installed_by": ["modules"]
+                        "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
+                    "trimgalore": {
+                        "branch": "master",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "installed_by": ["fastq_fastqc_umitools_trimgalore"]
+                    },
+                    "umitools/extract": {
+                        "branch": "master",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "installed_by": ["fastq_fastqc_umitools_fastp", "fastq_fastqc_umitools_trimgalore"]
                     },
                     "star/genomegenerate": {
                         "branch": "master",
@@ -84,6 +119,26 @@
             },
             "subworkflows": {
                 "nf-core": {
+                    "fastq_fastqc_umitools_fastp": {
+                        "branch": "master",
+                        "git_sha": "51c21921e151011213e5cf553cf06e6657e77594",
+                        "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
+                    "fastq_fastqc_umitools_trimgalore": {
+                        "branch": "master",
+                        "git_sha": "4c2d06a5e79abf08ba7f04c58e39c7dad75f094d",
+                        "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
+                    "fastq_qc_trim_filter_setstrandedness": {
+                        "branch": "master",
+                        "git_sha": "826975544c325283fecad776750a3cf8dc5703be",
+                        "installed_by": ["subworkflows"]
+                    },
+                    "fastq_subsample_fq_salmon": {
+                        "branch": "master",
+                        "git_sha": "a1abf90966a2a4016d3c3e41e228bfcbd4811ccc",
+                        "installed_by": ["fastq_qc_trim_filter_setstrandedness"]
+                    },
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "c2b22d85f30a706a3073387f30380704fcae013b",

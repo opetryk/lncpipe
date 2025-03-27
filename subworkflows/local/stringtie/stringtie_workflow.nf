@@ -13,16 +13,18 @@ workflow STRINGTIE_WORKFLOW {
 
         STRINGTIE_STRINGTIE(bam_sorted, ch_gtf)
         ch_versions = ch_versions.mix(STRINGTIE_STRINGTIE.out.versions)
+        ch_stringtie_gtf = STRINGTIE_STRINGTIE.out.transcript_gtf.map { meta, transcript_gtf -> [ transcript_gtf ] }.collect()
+        ch_stringtie_gtf.view()
 
         // STRINGTIE_STRINGTIE
         //     .out
         //     .transcript_gtf
         //     .map { it -> it[1] }
         //     .set { stringtie_gtf }.collect()
-        ch_stringtie_gtf = STRINGTIE_STRINGTIE.out.transcript_gtf.map { meta, transcript_gtf -> [ transcript_gtf ] }.collect()
+        //ch_stringtie_gtf = STRINGTIE_STRINGTIE.out.transcript_gtf.map { meta, transcript_gtf -> [ transcript_gtf ] }.collect()
 
 
-        STRINGTIE_MERGE (ch_stringtie_gtf, ch_gtf.map { meta, gtf -> [ gtf ]})
+        STRINGTIE_MERGE (ch_stringtie_gtf, ch_gtf)
         ch_versions = ch_versions.mix(STRINGTIE_MERGE.out.versions)
         ch_stringtie_gtf_merged = STRINGTIE_MERGE.out.gtf
 

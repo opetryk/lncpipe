@@ -301,6 +301,9 @@ workflow LNCPIPE {
     GFFCOMPARE(ch_merged_gtf, ch_fasta, ch_gtf)
     ch_versions = ch_versions.mix(GFFCOMPARE.out.versions)
 
+    ch_multiqc_files = ch_multiqc_files
+        .mix(GFFCOMPARE.out.stats.collect{it[1]})
+
 /*
 * Step 8: Filter GTFs to distinguish novel lncRNAs
 */

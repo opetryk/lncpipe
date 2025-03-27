@@ -29,7 +29,7 @@ workflow STRINGTIE_WORKFLOW {
         ch_stringtie_gtf_merged = STRINGTIE_MERGE.out.gtf
 
     emit:
-        stringtie_gtf_merged = ch_stringtie_gtf_merged.ifEmpty(null)
+        stringtie_gtf_merged = ch_stringtie_gtf_merged
         versions      = ch_versions
 
     }

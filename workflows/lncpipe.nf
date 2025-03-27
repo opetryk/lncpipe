@@ -278,18 +278,26 @@ workflow LNCPIPE {
 /*
 * Step 5: Transcript assembly using Stringtie and merge gtf into one
 */
-ch_genome_bam.view()
     STRINGTIE_WORKFLOW (
         ch_genome_bam,
         ch_gtf
     )
     ch_versions = ch_versions.mix(STRINGTIE_WORKFLOW.out.versions)
     ch_merged_gtf = STRINGTIE_WORKFLOW.out.stringtie_gtf_merged
-    ch_merged_gtf.view()
 /*
 * Step 6: Compare assembled gtf with known annotations
 */
-    GFFCOMPARE(ch_merged_gtf, ch_fasta, ch_gtf)
+    ch_fasta_meta_fai = ch_fasta.combine(ch_fai)
+        .map { fasta, fai ->
+            def meta2 = [ id: fasta.getBaseName(), description: 'Genome FASTA with index' ]
+            return [ meta2, fasta, fai ]
+        }
+
+    ch_reference_gtf = ch_gtf.map { gtf_file ->
+        def meta3 = [ id: gtf_file.getBaseName(), description: 'Reference GTF file' ]
+        return [ meta3, gtf_file ]
+    }
+    GFFCOMPARE(ch_merged_gtf, ch_fasta_meta_fai, ch_reference_gtf)
     ch_versions = ch_versions.mix(GFFCOMPARE.out.versions)
 
     ch_multiqc_files = ch_multiqc_files

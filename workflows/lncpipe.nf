@@ -284,7 +284,7 @@ workflow LNCPIPE {
         ch_multiqc_files = ch_multiqc_files.mix(ch_fail_mapping_multiqc.collectFile(name: 'fail_mapped_samples_mqc.tsv'))
     }
 
-
+ch_genome_bam.view()
 /*
 * Step 5: Transcript assembly using Stringtie and merge gtf into one
 */

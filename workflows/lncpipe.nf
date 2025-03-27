@@ -253,16 +253,6 @@ workflow LNCPIPE {
                     return [ meta.id, pass ]
             }
 
-        ch_genome_bam
-            .join(ch_percent_mapped, by: [0])
-            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
-            .set { ch_genome_bam }
-
-        ch_genome_bam_index
-            .join(ch_percent_mapped, by: [0])
-            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
-            .set { ch_genome_bam_index }
-
         ch_percent_mapped
             .branch { meta, mapped, pass ->
                 pass: pass
@@ -284,10 +274,11 @@ workflow LNCPIPE {
         ch_multiqc_files = ch_multiqc_files.mix(ch_fail_mapping_multiqc.collectFile(name: 'fail_mapped_samples_mqc.tsv'))
     }
 
-ch_genome_bam.view()
+
 /*
 * Step 5: Transcript assembly using Stringtie and merge gtf into one
 */
+ch_genome_bam.view()
     STRINGTIE_WORKFLOW (
         ch_genome_bam,
         ch_gtf

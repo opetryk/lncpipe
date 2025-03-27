@@ -23,8 +23,12 @@ workflow STRINGTIE_WORKFLOW {
         // STRINGTIE: Merge transcript assemblies into a non-redundant annotation
         //
         STRINGTIE_MERGE (ch_stringtie_gtf, ch_gtf)
-        ch_versions = ch_versions.mix(STRINGTIE_MERGE.out.versions)
         ch_stringtie_gtf_merged = STRINGTIE_MERGE.out.gtf
+            .map { gtf_file ->
+                def meta = [ id: 'stringtie_merged' ]
+                return [ meta, gtf_file ]
+            }
+        ch_versions = ch_versions.mix(STRINGTIE_MERGE.out.versions)
 
     emit:
         stringtie_gtf_merged = ch_stringtie_gtf_merged

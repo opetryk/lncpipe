@@ -3,18 +3,24 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                                } from '../modules/nf-core/fastqc/main'
-include { FASTQ_ALIGN_STAR                      } from '../subworkflows/nf-core/fastq_align_star/main'
+include { GFFCOMPARE                            } from '../modules/nf-core/gffcompare/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap                      } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc                  } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText                } from '../subworkflows/local/utils_nfcore_lncpipe_pipeline'
 include { samplesheetToList                     } from 'plugin/nf-schema'
+
+//
+// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+//
 include { FASTQ_QC_TRIM_FILTER_SETSTRANDEDNESS  } from '../subworkflows/nf-core/fastq_qc_trim_filter_setstrandedness'
+include { FASTQ_ALIGN_STAR                      } from '../subworkflows/nf-core/fastq_align_star/main'
+include { FASTQ_ALIGN_HISAT2                    } from '../subworkflows/nf-core/fastq_align_hisat2'
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_STAR   } from '../subworkflows/nf-core/bam_dedup_umi' // I would like to not import these as 2 and just have 1 workflow able to work with both star and hisat2 data.
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_HISAT2 } from '../subworkflows/nf-core/bam_dedup_umi'
-include { FASTQ_ALIGN_HISAT2                    } from '../subworkflows/nf-core/fastq_align_hisat2'
+include { STRINGTIE_WORKFLOW                    } from '../subworkflows/local/stringtie'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,17 +98,6 @@ workflow LNCPIPE {
             meta, num_reads ->
                 return [ meta.id, num_reads > params.min_trimmed_reads.toFloat() ]
         }
-
-    //
-    // Collate and save software versions
-    //
-    softwareVersionsToYAML(ch_versions)
-        .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_'  +  'lncpipe_software_'  + 'mqc_'  + 'versions.yml',
-            sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
 
     /*
     * Step 4: Initialize read alignment (STAR/HISAT2/tophat) <-- no tophat this time
@@ -258,16 +253,6 @@ workflow LNCPIPE {
                     return [ meta.id, pass ]
             }
 
-        ch_genome_bam
-            .join(ch_percent_mapped, by: [0])
-            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
-            .set { ch_genome_bam }
-
-        ch_genome_bam_index
-            .join(ch_percent_mapped, by: [0])
-            .map { meta, ofile, mapped, pass -> if (pass) [ meta, ofile ] }
-            .set { ch_genome_bam_index }
-
         ch_percent_mapped
             .branch { meta, mapped, pass ->
                 pass: pass
@@ -291,26 +276,32 @@ workflow LNCPIPE {
 
 
 /*
-* Step 5: Transcript assembly using Stringtie
+* Step 5: Transcript assembly using Stringtie and merge gtf into one
 */
+    STRINGTIE_WORKFLOW (
+        ch_genome_bam,
+        ch_gtf
+    )
+    ch_versions = ch_versions.mix(STRINGTIE_WORKFLOW.out.versions)
+    ch_merged_gtf = STRINGTIE_WORKFLOW.out.stringtie_gtf_merged
 /*
-* Step 6: Merged GTFs into one
+* Step 6: Compare assembled gtf with known annotations
 */
-    // if (params.aligner == 'hisat2') {
-    // STRINGTIE_ASSEMBLY(aligned_reads_ch, params.gtf)
-    // STRINGTIE_MERGE(STRINGTIE_ASSEMBLY.out.gtf.collect(), params.fasta)
-    // merged_gtf_ch = STRINGTIE_MERGE.out.merged_gtf
-    // } else {
-    // CUFFLINKS_ASSEMBLY(aligned_reads_ch, params.fasta, params.gtf)
-    // CUFFMERGE(CUFFLINKS_ASSEMBLY.out.gtf.collect(), params.fasta)
-    // merged_gtf_ch = CUFFMERGE.out.merged_gtf
-    // }
+    ch_fasta_meta_fai = ch_fasta.combine(ch_fai)
+        .map { fasta, fai ->
+            def meta2 = [ id: fasta.getBaseName(), description: 'Genome FASTA with index' ]
+            return [ meta2, fasta, fai ]
+        }
 
-/*
-* Step 7: Compare assembled gtf with known annotations (GENCODE)
-*/
-    //GFFCOMPARE(merged_gtf_ch, params.gtf)
+    ch_reference_gtf = ch_gtf.map { gtf_file ->
+        def meta3 = [ id: gtf_file.getBaseName(), description: 'Reference GTF file' ]
+        return [ meta3, gtf_file ]
+    }
+    GFFCOMPARE(ch_merged_gtf, ch_fasta_meta_fai, ch_reference_gtf)
+    ch_versions = ch_versions.mix(GFFCOMPARE.out.versions)
 
+    ch_multiqc_files = ch_multiqc_files
+        .mix(GFFCOMPARE.out.stats.collect{it[1]})
 
 /*
 * Step 8: Filter GTFs to distinguish novel lncRNAs
@@ -383,6 +374,18 @@ workflow LNCPIPE {
     //     SECONDARY_STATISTICS.out.stats,
     //     expression_matrix_ch
     // )
+
+    //
+    // Collate and save software versions
+    //
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline_info",
+            name: 'nf_core_'  +  'lncpipe_software_'  + 'mqc_'  + 'versions.yml',
+            sort: true,
+            newLine: true
+        ).set { ch_collated_versions }
+
 
 
     //

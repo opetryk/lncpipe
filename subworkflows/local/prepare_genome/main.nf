@@ -35,6 +35,7 @@ include { GTF2BED                              } from '../../../modules/local/gt
 include { GTF_FILTER                           } from '../../../modules/local/gtf_filter'
 include { STAR_GENOMEGENERATE_IGENOMES         } from '../../../modules/local/star_genomegenerate_igenomes'
 
+
 workflow PREPARE_GENOME {
     take:
     fasta                    //      file: /path/to/genome.fasta

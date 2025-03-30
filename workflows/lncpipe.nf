@@ -20,6 +20,8 @@ include { FASTQ_ALIGN_HISAT2                    } from '../subworkflows/nf-core/
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_STAR   } from '../subworkflows/nf-core/bam_dedup_umi' // I would like to not import these as 2 and just have 1 workflow able to work with both star and hisat2 data.
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_HISAT2 } from '../subworkflows/nf-core/bam_dedup_umi'
 include { STRINGTIE_WORKFLOW                    } from '../subworkflows/local/stringtie'
+include { SUBREAD_FEATURECOUNTS                 } from '../../modules/nf-core/subread/featurecounts/main'
+include { HTSEQ_COUNT                           } from '../modules/nf-core/htseq/count/main'  
 
 
 /*
@@ -348,8 +350,29 @@ workflow LNCPIPE {
     // )
 
 /*
-* Step 11: Quantification step (Kallisto/Htseq)
+* Step 11: Quantification step (Featurecounts/Htseq)
 */
+
+ if (params.counts == 'featurecounts') {
+    ch_feature_counts = ch_genome_bam.combine(ch_gtf) 
+ 
+        SUBREAD_FEATURECOUNTS(
+            ch_feature_counts
+            )
+        ch_versions         = ch_versions.mix(SUBREAD_FEATURECOUNTS.out.versions)
+        ch_counts           = SUBREAD_FEATURECOUNTS.out.counts
+    }
+
+    if (params.counts == 'htseq') {
+        ch_genome_bam_index = ch_genome_bam.combine(ch_genome_bam_index)
+        ch_htseq_counts     = ch_genome_bam.combine(ch_genome_bam_index).combine(ch_gtf)
+        HTSEQ_COUNT(
+            ch_htseq_counts
+        )
+        ch_versions         = ch_versions.mix(HTSEQ_COUNT.out.versions)
+        ch_counts           = HTSEQ_COUNT.out.txt
+    }
+
 /*
 * Step 12: Generate count matrix for differential expression analysis
 */

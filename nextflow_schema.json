@@ -250,6 +250,9 @@
             "$ref": "#/$defs/reference_genome_options"
         },
         {
+            "$ref": "#/$defs/counting_options"
+        },
+        {
             "$ref": "#/$defs/institutional_config_options"
         },
         {

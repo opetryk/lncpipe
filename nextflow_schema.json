@@ -80,7 +80,7 @@
                     "hidden": true,
                     "default": "s3://ngi-igenomes/igenomes/"
                 }
-            }    
+            }
         },
         "counting_options": {
             "title": "Counting options",

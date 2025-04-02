@@ -79,22 +79,21 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "default": "s3://ngi-igenomes/igenomes/"
-                },
-                "counting_options": {
-                    "title": "Counting options",
-                    "type": "object",
-                    "description": "Options for read counting",
-                    "default": "",
-                    "properties": {
-                        "counts": {
-                            "type": "string",
-                            "default": "featurecounts",
-                            "description": "Counting method to use",
-                            "enum": ["featurecounts", "htseq"],
-                            "help_text": "Choose between 'featurecounts' (default) or 'htseq' for read counting."
                 }
-            }
-        }
+            }    
+        },
+        "counting_options": {
+            "title": "Counting options",
+            "type": "object",
+            "description": "Options for read counting",
+            "properties": {
+                "counts": {
+                    "type": "string",
+                    "default": "featurecounts",
+                    "description": "Counting method to use",
+                    "enum": ["featurecounts", "htseq"],
+                    "help_text": "Choose between 'featurecounts' (default) or 'htseq' for read counting."
+                }
             }
         },
         "institutional_config_options": {

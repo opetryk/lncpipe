@@ -21,7 +21,7 @@ include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_STAR   } from '../subworkflows/nf-core/
 include { BAM_DEDUP_UMI as BAM_DEDUP_UMI_HISAT2 } from '../subworkflows/nf-core/bam_dedup_umi'
 include { STRINGTIE_WORKFLOW                    } from '../subworkflows/local/stringtie'
 include { SUBREAD_FEATURECOUNTS                 } from '../modules/nf-core/subread/featurecounts/main'
-include { HTSEQ_COUNT                           } from '../modules/nf-core/htseq/count/main'  
+include { HTSEQ_COUNT                           } from '../modules/nf-core/htseq/count/main'
 
 
 /*
@@ -353,9 +353,8 @@ workflow LNCPIPE {
 * Step 11: Quantification step (Featurecounts/Htseq)
 */
 
- if (params.counts == 'featurecounts') {
-    ch_feature_counts = ch_genome_bam.combine(ch_gtf) 
- 
+    if (params.counts == 'featurecounts') {
+        ch_feature_counts = ch_genome_bam.combine(ch_gtf)
         SUBREAD_FEATURECOUNTS(
             ch_feature_counts
             )

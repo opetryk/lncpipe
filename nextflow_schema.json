@@ -82,6 +82,20 @@
                 }
             }
         },
+        "counting_options": {
+            "title": "Counting options",
+            "type": "object",
+            "description": "Options for read counting",
+            "properties": {
+                "counts": {
+                    "type": "string",
+                    "default": "featurecounts",
+                    "description": "Counting method to use",
+                    "enum": ["featurecounts", "htseq"],
+                    "help_text": "Choose between 'featurecounts' (default) or 'htseq' for read counting."
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -234,6 +248,9 @@
         },
         {
             "$ref": "#/$defs/reference_genome_options"
+        },
+        {
+            "$ref": "#/$defs/counting_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
